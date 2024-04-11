@@ -68,13 +68,10 @@ class GrafoNoDirigido {
         PriorityQueue<Arista> colaPrioridad = new PriorityQueue<>((a, b) -> a.getPeso() - b.getPeso());
         Set<Ubicacion> visitados = new HashSet<>();
 
-        // Inicializar todas las distancias como infinito
         for (Ubicacion ubicacion : listaAdyacencia.keySet()) {
             distancias.put(ubicacion, Integer.MAX_VALUE);
         }
         distancias.put(origen, 0);
-
-        // Agregar el origen a la cola de prioridad
         colaPrioridad.offer(new Arista(origen, 0));
 
         while (!colaPrioridad.isEmpty()) {
@@ -84,6 +81,8 @@ class GrafoNoDirigido {
             if (visitados.contains(actual)) continue;
             visitados.add(actual);
 
+            System.out.println("Visitando: " + actual.getNombre());
+
             for (Arista arista : listaAdyacencia.get(actual)) {
                 Ubicacion vecino = arista.getDestino();
                 int peso = arista.getPeso();
@@ -92,6 +91,7 @@ class GrafoNoDirigido {
                         && distancias.get(actual) + peso < distancias.get(vecino)) {
                     distancias.put(vecino, distancias.get(actual) + peso);
                     colaPrioridad.offer(new Arista(vecino, distancias.get(vecino)));
+                    System.out.println("Actualizando distancia de " + vecino.getNombre() + " a " + distancias.get(vecino));
                 }
             }
         }
