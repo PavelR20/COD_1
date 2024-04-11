@@ -1,5 +1,7 @@
 import java.util.PriorityQueue;
 
+
+
 public abstract class Algoritmos {
     
     protected int dijkstra;
@@ -55,6 +57,7 @@ public abstract class Algoritmos {
     private static class Node {
         int vertex;
         int distance;
+		public Node parent;
 
         public Node(int vertex, int distance) {
             this.vertex = vertex;
@@ -62,4 +65,12 @@ public abstract class Algoritmos {
         }
     }
 }
+    
+
+
+
+
+
+    
+
 

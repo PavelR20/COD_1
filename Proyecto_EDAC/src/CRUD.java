@@ -98,10 +98,44 @@ class GrafoNoDirigido {
 
         return distancias;
     }
+    
+    public Map<Ubicacion, Integer> RutaOptima(Ubicacion origen) {
+        Map<Ubicacion, Integer> distancias = new HashMap<>();
+        PriorityQueue<Arista> colaPrioridad = new PriorityQueue<>((a, b) -> a.getPeso() - b.getPeso());
+        Set<Ubicacion> visitados = new HashSet<>();
+
+        for (Ubicacion ubicacion : listaAdyacencia.keySet()) {
+            distancias.put(ubicacion, Integer.MAX_VALUE);
+        }
+        distancias.put(origen, 0);
+        colaPrioridad.offer(new Arista(origen, 0));
+
+        while (!colaPrioridad.isEmpty()) {
+            Arista aristaActual = colaPrioridad.poll();
+            Ubicacion actual = aristaActual.getDestino();
+
+            if (visitados.contains(actual)) continue;
+            visitados.add(actual);
+
+            for (Arista arista : listaAdyacencia.get(actual)) {
+                Ubicacion vecino = arista.getDestino();
+                int peso = arista.getPeso();
+
+                if (!visitados.contains(vecino) && distancias.get(actual) != Integer.MAX_VALUE
+                        && distancias.get(actual) + peso < distancias.get(vecino)) {
+                    distancias.put(vecino, distancias.get(actual) + peso);
+                    colaPrioridad.offer(new Arista(vecino, distancias.get(vecino)));
+                }
+            }
+        }
+
+        return distancias;
+    }
+
 
     public void imprimirLista() {
         for (Map.Entry<Ubicacion, List<Arista>> entry : listaAdyacencia.entrySet()) {
-            System.out.print("Ubicación " + entry.getKey().getNombre() + " está conectada con: ");
+            System.out.print("Ubicacion " + entry.getKey().getNombre() + " esta conectada con: ");
             for (Arista arista : entry.getValue()) {
                 System.out.print(arista.getDestino().getNombre() + " (Peso: " + arista.getPeso() + ") ");
             }

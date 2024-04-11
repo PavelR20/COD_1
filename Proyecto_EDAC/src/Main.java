@@ -7,18 +7,19 @@ public class Main {
         GrafoNoDirigido grafo = new GrafoNoDirigido();
 
         while (true) {
-            System.out.println("驴Qu茅 acci贸n desea realizar?");
-            System.out.println("1. Agregar ubicaci贸n");
+            System.out.println("縌ue accion desea realizar?");
+            System.out.println("1. Agregar ubicacion");
             System.out.println("2. Agregar arista con peso");
-            System.out.println("3. Calcular ruta m谩s corta desde una ubicaci贸n");
-            System.out.println("4. Salir");
-            System.out.print("Ingrese el n煤mero de la acci贸n: ");
+            System.out.println("3. Calcular ruta mas corta desde una ubicacion");
+            System.out.println("4 Representacion rutas 髉timas para conectar las ubicaciones");
+            System.out.println("5. Salir");
+            System.out.print("Ingrese el numero de la accion: ");
             int opcion = scanner.nextInt();
             scanner.nextLine(); // Limpiar el buffer de entrada
 
             switch (opcion) {
                 case 1:
-                    System.out.print("Ingrese el nombre de la ubicaci贸n: ");
+                    System.out.print("Ingrese el nombre de la ubicacion: ");
                     String nombreUbicacion = scanner.nextLine();
                     grafo.agregarUbicacion(new Ubicacion(nombreUbicacion));
                     break;
@@ -33,24 +34,39 @@ public class Main {
                     grafo.agregarArista(new Ubicacion(nombreOrigen), new Ubicacion(nombreDestino), peso);
                     break;
                 case 3:
-                    System.out.print("Ingrese el nombre de la ubicaci贸n de origen: ");
+                    System.out.print("Ingrese el nombre de la ubicacion de origen: ");
                     String nombreOrigenRuta = scanner.nextLine();
                     Ubicacion ubicacionOrigen = new Ubicacion(nombreOrigenRuta);
                     if (!grafo.existeUbicacion(ubicacionOrigen)) {
-                        System.out.println("La ubicaci贸n de origen no existe en el grafo.");
+                        System.out.println("La ubicacion de origen no existe en el grafo.");
                         break;
                     }
-                    System.out.println("Distanci13as desde la ubicaci贸n: " + nombreOrigenRuta);
+                    System.out.println("Distancias desde la ubicacion: " + nombreOrigenRuta);
                     Map<Ubicacion, Integer> distancias = grafo.rutaMasCorta(ubicacionOrigen);
                     for (Map.Entry<Ubicacion, Integer> entry : distancias.entrySet()) {
                         System.out.println("A " + entry.getKey().getNombre() + ": " + entry.getValue());
                     }
                     break;
+                    
                 case 4:
-                    System.out.println("隆Hasta luego!");
+                    System.out.print("Ingrese el nombre de la ubicacion de origen: ");
+                    String nombreOrigenRuta1 = scanner.nextLine();
+                    Ubicacion ubicacionOrigen1 = new Ubicacion(nombreOrigenRuta1);
+                    if (!grafo.existeUbicacion(ubicacionOrigen1)) {
+                        System.out.println("La ubicacion de origen no existe en el grafo.");
+                        break;
+                    }
+                    System.out.println("Distancias desde la ubicacion: " + nombreOrigenRuta1);
+                    Map<Ubicacion, Integer> distancias1 = grafo.rutaMasCorta(ubicacionOrigen1);
+                    for (Map.Entry<Ubicacion, Integer> entry : distancias1.entrySet()) {
+                        System.out.println("A " + entry.getKey().getNombre() + ": " + entry.getValue());
+                    }
+                    break;
+                case 5:
+                    System.out.println("asta luego!");
                     System.exit(0);
                 default:
-                    System.out.println("隆Opci贸n inv谩lida! Por favor, ingrese un n煤mero del 1 al 4.");
+                    System.out.println("Opcion invalida! Por favor, ingrese un numero del 1 al 5.");
             }
         }
     }
