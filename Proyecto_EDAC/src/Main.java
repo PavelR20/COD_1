@@ -1,4 +1,6 @@
-import java.util.*;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.Set;
 
 public class Main {
     public static void main(String[] args) {
@@ -6,53 +8,57 @@ public class Main {
         GrafoNoDirigido grafo = new GrafoNoDirigido();
 
         while (true) {
-            System.out.println("¿Qué acción desea realizar?");
+            System.out.println("----- Menú -----");
             System.out.println("1. Agregar ubicación");
             System.out.println("2. Agregar arista con peso");
             System.out.println("3. Calcular ruta más corta desde una ubicación");
-            System.out.println("4. Mostrar todas las ubicaciones");
+            System.out.println("4. Mostrar todas las ubicaciones registradas");
             System.out.println("5. Salir");
             System.out.print("Ingrese el número de la acción: ");
 
-            int opcion;
-            try {
-                opcion = Integer.parseInt(scanner.nextLine());
-            } catch (NumberFormatException e) {
-                System.out.println("Ingrese un número válido.");
-                continue;
-            }
+            int opcion = scanner.nextInt();
+            scanner.nextLine(); // Limpiar el buffer de entrada
 
             switch (opcion) {
                 case 1:
                     System.out.print("Ingrese el nombre de la ubicación: ");
-                    String nombreUbicacion = scanner.nextLine().toLowerCase();
+                    String nombreUbicacion = scanner.nextLine();
                     grafo.agregarUbicacion(new Ubicacion(nombreUbicacion));
                     break;
                 case 2:
                     System.out.print("Ingrese el nombre del origen: ");
-                    String nombreOrigen = scanner.nextLine().toLowerCase();
+                    String nombreOrigen = scanner.nextLine();
                     System.out.print("Ingrese el nombre del destino: ");
-                    String nombreDestino = scanner.nextLine().toLowerCase();
+                    String nombreDestino = scanner.nextLine();
                     System.out.print("Ingrese el peso de la arista: ");
-                    int peso = Integer.parseInt(scanner.nextLine());
+                    int peso = scanner.nextInt();
+                    scanner.nextLine(); // Limpiar el buffer de entrada
                     grafo.agregarArista(new Ubicacion(nombreOrigen), new Ubicacion(nombreDestino), peso);
                     break;
                 case 3:
                     System.out.print("Ingrese el nombre de la ubicación de origen: ");
-                    String nombreOrigenRuta = scanner.nextLine().toLowerCase();
+                    String nombreOrigenRuta = scanner.nextLine();
                     Ubicacion ubicacionOrigen = new Ubicacion(nombreOrigenRuta);
-                    if (grafo.existeUbicacion(ubicacionOrigen)) {
-                        System.out.println("Calculando ruta más corta desde " + nombreOrigenRuta + "...");
-                        Map<Ubicacion, Integer> distancias = grafo.rutaMasCorta(ubicacionOrigen);
-                        for (Map.Entry<Ubicacion, Integer> entry : distancias.entrySet()) {
-                            System.out.println("Distancia a " + entry.getKey().getNombre() + ": " + entry.getValue());
-                        }
-                    } else {
+
+                    if (!grafo.existeUbicacion(ubicacionOrigen)) {
                         System.out.println("La ubicación de origen no existe en el grafo.");
+                    } else {
+                        Map<Ubicacion, Integer> distancias = grafo.rutaMasCorta(ubicacionOrigen);
+                        System.out.println("Ruta más corta desde " + nombreOrigenRuta + ":");
+
+                        for (Map.Entry<Ubicacion, Integer> entry : distancias.entrySet()) {
+                            if (entry.getValue() != Integer.MAX_VALUE) {
+                                System.out.println("A " + entry.getKey().getNombre() + ": " + entry.getValue());
+                            }
+                        }
                     }
                     break;
                 case 4:
-                    grafo.imprimirUbicaciones();
+                    System.out.println("----- Ubicaciones Registradas -----");
+                    Set<Ubicacion> ubicaciones = grafo.obtenerUbicaciones();
+                    for (Ubicacion ubicacion : ubicaciones) {
+                        System.out.println(ubicacion.getNombre());
+                    }
                     break;
                 case 5:
                     System.out.println("¡Hasta luego!");
