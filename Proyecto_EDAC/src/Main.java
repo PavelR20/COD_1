@@ -40,7 +40,7 @@ public class Main {
                         System.out.println("La ubicación de origen no existe en el grafo.");
                         break;
                     }
-                    System.out.println("Distanci1as desde la ubicación: " + nombreOrigenRuta);
+                    System.out.println("Distanci13as desde la ubicación: " + nombreOrigenRuta);
                     Map<Ubicacion, Integer> distancias = grafo.rutaMasCorta(ubicacionOrigen);
                     for (Map.Entry<Ubicacion, Integer> entry : distancias.entrySet()) {
                         System.out.println("A " + entry.getKey().getNombre() + ": " + entry.getValue());
