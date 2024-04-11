@@ -2,6 +2,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Set;
+import java.util.HashSet;
 
 class Ubicacion {
     private String nombre;
@@ -26,8 +29,26 @@ class Ubicacion {
     }
 }
 
+class Arista {
+    private Ubicacion destino;
+    private int peso;
+
+    public Arista(Ubicacion destino, int peso) {
+        this.destino = destino;
+        this.peso = peso;
+    }
+
+    public Ubicacion getDestino() {
+        return destino;
+    }
+
+    public int getPeso() {
+        return peso;
+    }
+}
+
 class GrafoNoDirigido {
-    private Map<Ubicacion, List<Ubicacion>> listaAdyacencia;
+    private Map<Ubicacion, List<Arista>> listaAdyacencia;
 
     public GrafoNoDirigido() {
         listaAdyacencia = new HashMap<>();
@@ -37,23 +58,52 @@ class GrafoNoDirigido {
         listaAdyacencia.put(ubicacion, new ArrayList<>());
     }
 
-    public void agregarArista(Ubicacion origen, Ubicacion destino) {
-        listaAdyacencia.get(origen).add(destino);
-        listaAdyacencia.get(destino).add(origen);
+    public void agregarArista(Ubicacion origen, Ubicacion destino, int peso) {
+        listaAdyacencia.get(origen).add(new Arista(destino, peso));
+        listaAdyacencia.get(destino).add(new Arista(origen, peso));
     }
 
-    public void eliminarUbicacion(Ubicacion ubicacion) {
-        listaAdyacencia.remove(ubicacion);
-        for (List<Ubicacion> adyacentes : listaAdyacencia.values()) {
-            adyacentes.remove(ubicacion);
+    public Map<Ubicacion, Integer> rutaMasCorta(Ubicacion origen) {
+        Map<Ubicacion, Integer> distancias = new HashMap<>();
+        PriorityQueue<Arista> colaPrioridad = new PriorityQueue<>((a, b) -> a.getPeso() - b.getPeso());
+        Set<Ubicacion> visitados = new HashSet<>();
+
+        // Inicializar todas las distancias como infinito
+        for (Ubicacion ubicacion : listaAdyacencia.keySet()) {
+            distancias.put(ubicacion, Integer.MAX_VALUE);
         }
+        distancias.put(origen, 0);
+
+        // Agregar el origen a la cola de prioridad
+        colaPrioridad.offer(new Arista(origen, 0));
+
+        while (!colaPrioridad.isEmpty()) {
+            Arista aristaActual = colaPrioridad.poll();
+            Ubicacion actual = aristaActual.getDestino();
+
+            if (visitados.contains(actual)) continue;
+            visitados.add(actual);
+
+            for (Arista arista : listaAdyacencia.get(actual)) {
+                Ubicacion vecino = arista.getDestino();
+                int peso = arista.getPeso();
+
+                if (!visitados.contains(vecino) && distancias.get(actual) != Integer.MAX_VALUE
+                        && distancias.get(actual) + peso < distancias.get(vecino)) {
+                    distancias.put(vecino, distancias.get(actual) + peso);
+                    colaPrioridad.offer(new Arista(vecino, distancias.get(vecino)));
+                }
+            }
+        }
+
+        return distancias;
     }
 
     public void imprimirLista() {
-        for (Map.Entry<Ubicacion, List<Ubicacion>> entry : listaAdyacencia.entrySet()) {
+        for (Map.Entry<Ubicacion, List<Arista>> entry : listaAdyacencia.entrySet()) {
             System.out.print("Ubicación " + entry.getKey().getNombre() + " está conectada con: ");
-            for (Ubicacion adyacente : entry.getValue()) {
-                System.out.print(adyacente.getNombre() + " ");
+            for (Arista arista : entry.getValue()) {
+                System.out.print(arista.getDestino().getNombre() + " (Peso: " + arista.getPeso() + ") ");
             }
             System.out.println();
         }
