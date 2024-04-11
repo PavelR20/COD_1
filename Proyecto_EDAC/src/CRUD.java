@@ -108,4 +108,8 @@ class GrafoNoDirigido {
             System.out.println();
         }
     }
+
+    public boolean existeUbicacion(Ubicacion ubicacion) {
+        return listaAdyacencia.containsKey(ubicacion);
+    }
 }
