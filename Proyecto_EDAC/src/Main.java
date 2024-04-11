@@ -1,12 +1,29 @@
-
 public class Main {
     public static void main(String[] args) {
-       
-        System.out.printf("Hello and welcome!");
+        GrafoNoDirigido grafo = new GrafoNoDirigido();
 
-        for (int i = 1; i <= 5; i++) {
+        // Agregar ubicaciones
+        Ubicacion ubicacionA = new Ubicacion("A");
+        Ubicacion ubicacionB = new Ubicacion("B");
+        Ubicacion ubicacionC = new Ubicacion("C");
 
-            System.out.println("i = " + i);
-        }
+        grafo.agregarUbicacion(ubicacionA);
+        grafo.agregarUbicacion(ubicacionB);
+        grafo.agregarUbicacion(ubicacionC);
+
+        // Agregar aristas
+        grafo.agregarArista(ubicacionA, ubicacionB);
+        grafo.agregarArista(ubicacionB, ubicacionC);
+
+        // Imprimir lista de adyacencia
+        System.out.println("Lista de adyacencia:");
+        grafo.imprimirLista();
+
+        // Eliminar una ubicación y sus aristas
+        grafo.eliminarUbicacion(ubicacionB);
+
+        // Imprimir lista de adyacencia después de eliminar una ubicación
+        System.out.println("\nLista de adyacencia después de eliminar B:");
+        grafo.imprimirLista();
     }
 }
