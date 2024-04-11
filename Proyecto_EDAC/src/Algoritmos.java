@@ -1,76 +1,65 @@
 import java.util.PriorityQueue;
 
-public class Algoritmos {
-	
-	
+public abstract class Algoritmos {
+    
+    protected int dijkstra;
+    
+    public Algoritmos(int dijkstra) {
+        super();
+        this.dijkstra = dijkstra;
+    }
 
-	    private static final int INF = Integer.MAX_VALUE;
+    private static final int INF = Integer.MAX_VALUE;
 
-	    public static void main(String[] args) {
-	        int[][] graph = {
-	            {0, 4, 0, 0, 0},
-	            {4, 0, 8, 0, 0},
-	            {0, 8, 0, 7, 0},
-	            {0, 0, 7, 0, 9},
-	            {0, 0, 0, 9, 0}
-	        };
+    public int[] dijkstra(int[][] graph, int source) {
+        int[] distance = new int[graph.length];
+        boolean[] visited = new boolean[graph.length];
 
-	        int source = 0;
-	        dijkstra(graph, source);
+        for (int i = 0; i < graph.length; i++) {
+            distance[i] = INF;
+            visited[i] = false;
+        }
 
-	        for (int i = 0; i < graph.length; i++) {
-	            System.out.println("Distancia de " + source + " a " + i + ": " + graph[source][i]);
-	        }
-	    }
+        distance[source] = 0;
 
-	    private static void dijkstra(int[][] graph, int source) {
-	        int[] distance = new int[graph.length];
-	        boolean[] visited = new boolean[graph.length];
+        PriorityQueue<Node> pq = new PriorityQueue<>(
+            (a, b) -> Integer.compare(a.distance, b.distance)
+        );
 
-	        for (int i = 0; i < graph.length; i++) {
-	            distance[i] = INF;
-	            visited[i] = false;
-	        }
+        pq.add(new Node(source, 0));
 
-	        distance[source] = 0;
+        while (!pq.isEmpty()) {
+            Node node = pq.poll();
 
-	        PriorityQueue<Node> pq = new PriorityQueue<>(
-	            (a, b) -> Integer.compare(a.distance, b.distance)
-	        );
+            if (visited[node.vertex]) {
+                continue;
+            }
 
-	        pq.add(new Node(source, 0));
+            visited[node.vertex] = true;
 
-	        while (!pq.isEmpty()) {
-	            Node node = pq.poll();
+            for (int neighbor = 0; neighbor < graph.length; neighbor++) {
+                if (graph[node.vertex][neighbor] > 0 && !visited[neighbor]) {
+                    int newDistance = distance[node.vertex] + graph[node.vertex][neighbor];
 
-	            if (visited[node.vertex]) {
-	                continue;
-	            }
+                    if (newDistance < distance[neighbor]) {
+                        distance[neighbor] = newDistance;
+                        pq.add(new Node(neighbor, newDistance));
+                    }
+                }
+            }
+        }
 
-	            visited[node.vertex] = true;
+        return distance;
+    }
 
-	            for (int neighbor = 0; neighbor < graph.length; neighbor++) {
-	                if (graph[node.vertex][neighbor] > 0 && !visited[neighbor]) {
-	                    int newDistance = distance[node.vertex] + graph[node.vertex][neighbor];
+    private static class Node {
+        int vertex;
+        int distance;
 
-	                    if (newDistance < distance[neighbor]) {
-	                        distance[neighbor] = newDistance;
-	                        pq.add(new Node(neighbor, newDistance));
-	                    }
-	                }
-	            }
-	        }
-	    }
-
-	    private static class Node {
-	        int vertex;
-	        int distance;
-
-	        public Node(int vertex, int distance) {
-	            this.vertex = vertex;
-	            this.distance = distance;	        }
-	    
-	    }
+        public Node(int vertex, int distance) {
+            this.vertex = vertex;
+            this.distance = distance;
+        }
+    }
 }
-
 
