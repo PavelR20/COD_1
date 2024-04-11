@@ -8,7 +8,7 @@ public class Main {
         GrafoNoDirigido grafo = new GrafoNoDirigido();
 
         while (true) {
-            System.out.println("----- Menú -----");
+            System.out.println("---- Menú ----");
             System.out.println("1. Agregar ubicación");
             System.out.println("2. Agregar arista con peso");
             System.out.println("3. Calcular ruta más corta desde una ubicación");
