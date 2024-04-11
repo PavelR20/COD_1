@@ -16,6 +16,19 @@ class Ubicacion {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Ubicacion ubicacion = (Ubicacion) o;
+        return Objects.equals(nombre, ubicacion.nombre);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nombre);
+    }
+
+    @Override
     public String toString() {
         return "Ubicacion{" +
                 "nombre='" + nombre + '\'' +
@@ -109,7 +122,6 @@ class GrafoNoDirigido {
     public boolean existeUbicacion(Ubicacion ubicacion) {
         return listaAdyacencia.containsKey(ubicacion);
     }
-
 
 
     public Set<Ubicacion> obtenerUbicaciones() {

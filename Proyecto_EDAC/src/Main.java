@@ -15,6 +15,7 @@ public class Main {
             System.out.println("4. Mostrar todas las ubicaciones registradas");
             System.out.println("5. Salir");
             System.out.print("Ingrese el número de la acción: ");
+
             int opcion = scanner.nextInt();
             scanner.nextLine(); // Limpiar el buffer de entrada
 
@@ -38,13 +39,17 @@ public class Main {
                     System.out.print("Ingrese el nombre de la ubicación de origen: ");
                     String nombreOrigenRuta = scanner.nextLine();
                     Ubicacion ubicacionOrigen = new Ubicacion(nombreOrigenRuta);
+
                     if (!grafo.existeUbicacion(ubicacionOrigen)) {
                         System.out.println("La ubicación de origen no existe en el grafo.");
                     } else {
-                        System.out.println("Distancias desde la ubicación: " + nombreOrigenRuta);
                         Map<Ubicacion, Integer> distancias = grafo.rutaMasCorta(ubicacionOrigen);
+                        System.out.println("Ruta más corta desde " + nombreOrigenRuta + ":");
+
                         for (Map.Entry<Ubicacion, Integer> entry : distancias.entrySet()) {
-                            System.out.println("A " + entry.getKey().getNombre() + ": " + entry.getValue());
+                            if (entry.getValue() != Integer.MAX_VALUE) {
+                                System.out.println("A " + entry.getKey().getNombre() + ": " + entry.getValue());
+                            }
                         }
                     }
                     break;
