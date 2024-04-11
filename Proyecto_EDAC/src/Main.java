@@ -40,12 +40,12 @@ public class Main {
                     Ubicacion ubicacionOrigen = new Ubicacion(nombreOrigenRuta);
                     if (!grafo.existeUbicacion(ubicacionOrigen)) {
                         System.out.println("La ubicación de origen no existe en el grafo.");
-                        break;
-                    }
-                    System.out.println("Distancias desde la ubicación: " + nombreOrigenRuta);
-                    Map<Ubicacion, Integer> distancias = grafo.rutaMasCorta(ubicacionOrigen);
-                    for (Map.Entry<Ubicacion, Integer> entry : distancias.entrySet()) {
-                        System.out.println("A " + entry.getKey().getNombre() + ": " + entry.getValue());
+                    } else {
+                        System.out.println("Distancias desde la ubicación: " + nombreOrigenRuta);
+                        Map<Ubicacion, Integer> distancias = grafo.rutaMasCorta(ubicacionOrigen);
+                        for (Map.Entry<Ubicacion, Integer> entry : distancias.entrySet()) {
+                            System.out.println("A " + entry.getKey().getNombre() + ": " + entry.getValue());
+                        }
                     }
                     break;
                 case 4:

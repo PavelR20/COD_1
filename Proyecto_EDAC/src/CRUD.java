@@ -110,6 +110,8 @@ class GrafoNoDirigido {
         return listaAdyacencia.containsKey(ubicacion);
     }
 
+
+
     public Set<Ubicacion> obtenerUbicaciones() {
         return listaAdyacencia.keySet();
     }
