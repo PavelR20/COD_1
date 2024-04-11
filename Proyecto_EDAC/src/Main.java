@@ -7,19 +7,19 @@ public class Main {
         GrafoNoDirigido grafo = new GrafoNoDirigido();
 
         while (true) {
-            System.out.println("¿Que accion desea realizar?");
-            System.out.println("1. Agregar ubicacion");
+            System.out.println("¿Qué acción desea realizar?");
+            System.out.println("1. Agregar ubicación");
             System.out.println("2. Agregar arista con peso");
-            System.out.println("3. Calcular ruta mas corta desde una ubicacion");
-            System.out.println("4 Representacion rutas óptimas para conectar las ubicaciones");
+            System.out.println("3. Calcular ruta más corta desde una ubicación");
+            System.out.println("4. Representación rutas óptimas para conectar las ubicaciones");
             System.out.println("5. Salir");
-            System.out.print("Ingrese el numero de la accion: ");
+            System.out.print("Ingrese el número de la acción: ");
             int opcion = scanner.nextInt();
             scanner.nextLine(); // Limpiar el buffer de entrada
 
             switch (opcion) {
                 case 1:
-                    System.out.print("Ingrese el nombre de la ubicacion: ");
+                    System.out.print("Ingrese el nombre de la ubicación: ");
                     String nombreUbicacion = scanner.nextLine();
                     grafo.agregarUbicacion(new Ubicacion(nombreUbicacion));
                     break;
@@ -34,39 +34,27 @@ public class Main {
                     grafo.agregarArista(new Ubicacion(nombreOrigen), new Ubicacion(nombreDestino), peso);
                     break;
                 case 3:
-                    System.out.print("Ingrese el nombre de la ubicacion de origen: ");
+                    System.out.print("Ingrese el nombre de la ubicación de origen: ");
                     String nombreOrigenRuta = scanner.nextLine();
                     Ubicacion ubicacionOrigen = new Ubicacion(nombreOrigenRuta);
                     if (!grafo.existeUbicacion(ubicacionOrigen)) {
-                        System.out.println("La ubicacion de origen no existe en el grafo.");
+                        System.out.println("La ubicación de origen no existe en el grafo.");
                         break;
                     }
-                    System.out.println("Distancias desde la ubicacion: " + nombreOrigenRuta);
+                    System.out.println("Distancias desde la ubicación: " + nombreOrigenRuta);
                     Map<Ubicacion, Integer> distancias = grafo.rutaMasCorta(ubicacionOrigen);
                     for (Map.Entry<Ubicacion, Integer> entry : distancias.entrySet()) {
                         System.out.println("A " + entry.getKey().getNombre() + ": " + entry.getValue());
                     }
                     break;
-                    
                 case 4:
-                    System.out.print("Ingrese el nombre de la ubicacion de origen: ");
-                    String nombreOrigenRuta1 = scanner.nextLine();
-                    Ubicacion ubicacionOrigen1 = new Ubicacion(nombreOrigenRuta1);
-                    if (!grafo.existeUbicacion(ubicacionOrigen1)) {
-                        System.out.println("La ubicacion de origen no existe en el grafo.");
-                        break;
-                    }
-                    System.out.println("Distancias desde la ubicacion: " + nombreOrigenRuta1);
-                    Map<Ubicacion, Integer> distancias1 = grafo.rutaMasCorta(ubicacionOrigen1);
-                    for (Map.Entry<Ubicacion, Integer> entry : distancias1.entrySet()) {
-                        System.out.println("A " + entry.getKey().getNombre() + ": " + entry.getValue());
-                    }
+                    System.out.println("Función no implementada aún.");
                     break;
                 case 5:
                     System.out.println("¡Hasta luego!");
                     System.exit(0);
                 default:
-                    System.out.println("Opcion invalida! Por favor, ingrese un numero del 1 al 5.");
+                    System.out.println("Opción inválida! Por favor, ingrese un número del 1 al 5.");
             }
         }
     }

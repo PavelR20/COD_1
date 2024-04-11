@@ -1,10 +1,4 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.PriorityQueue;
-import java.util.Set;
-import java.util.HashSet;
+import java.util.*;
 
 class Ubicacion {
     private String nombre;
@@ -59,6 +53,12 @@ class GrafoNoDirigido {
     }
 
     public void agregarArista(Ubicacion origen, Ubicacion destino, int peso) {
+        if (!listaAdyacencia.containsKey(origen)) {
+            agregarUbicacion(origen);
+        }
+        if (!listaAdyacencia.containsKey(destino)) {
+            agregarUbicacion(destino);
+        }
         listaAdyacencia.get(origen).add(new Arista(destino, peso));
         listaAdyacencia.get(destino).add(new Arista(origen, peso));
     }
@@ -81,42 +81,6 @@ class GrafoNoDirigido {
             if (visitados.contains(actual)) continue;
             visitados.add(actual);
 
-            System.out.println("Visitando: " + actual.getNombre());
-
-            for (Arista arista : listaAdyacencia.get(actual)) {
-                Ubicacion vecino = arista.getDestino();
-                int peso = arista.getPeso();
-
-                if (!visitados.contains(vecino) && distancias.get(actual) != Integer.MAX_VALUE
-                        && distancias.get(actual) + peso < distancias.get(vecino)) {
-                    distancias.put(vecino, distancias.get(actual) + peso);
-                    colaPrioridad.offer(new Arista(vecino, distancias.get(vecino)));
-                    System.out.println("Actualizando distancia de " + vecino.getNombre() + " a " + distancias.get(vecino));
-                }
-            }
-        }
-
-        return distancias;
-    }
-    
-    public Map<Ubicacion, Integer> RutaOptima(Ubicacion origen) {
-        Map<Ubicacion, Integer> distancias = new HashMap<>();
-        PriorityQueue<Arista> colaPrioridad = new PriorityQueue<>((a, b) -> a.getPeso() - b.getPeso());
-        Set<Ubicacion> visitados = new HashSet<>();
-
-        for (Ubicacion ubicacion : listaAdyacencia.keySet()) {
-            distancias.put(ubicacion, Integer.MAX_VALUE);
-        }
-        distancias.put(origen, 0);
-        colaPrioridad.offer(new Arista(origen, 0));
-
-        while (!colaPrioridad.isEmpty()) {
-            Arista aristaActual = colaPrioridad.poll();
-            Ubicacion actual = aristaActual.getDestino();
-
-            if (visitados.contains(actual)) continue;
-            visitados.add(actual);
-
             for (Arista arista : listaAdyacencia.get(actual)) {
                 Ubicacion vecino = arista.getDestino();
                 int peso = arista.getPeso();
@@ -131,7 +95,6 @@ class GrafoNoDirigido {
 
         return distancias;
     }
-
 
     public void imprimirLista() {
         for (Map.Entry<Ubicacion, List<Arista>> entry : listaAdyacencia.entrySet()) {
@@ -147,3 +110,4 @@ class GrafoNoDirigido {
         return listaAdyacencia.containsKey(ubicacion);
     }
 }
+
