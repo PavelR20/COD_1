@@ -1,5 +1,6 @@
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 
 public class Main {
     public static void main(String[] args) {
@@ -7,11 +8,11 @@ public class Main {
         GrafoNoDirigido grafo = new GrafoNoDirigido();
 
         while (true) {
-            System.out.println("¿Qué acción desea realizar?");
+            System.out.println("----- Menú -----");
             System.out.println("1. Agregar ubicación");
             System.out.println("2. Agregar arista con peso");
             System.out.println("3. Calcular ruta más corta desde una ubicación");
-            System.out.println("4. Representación rutas óptimas para conectar las ubicaciones");
+            System.out.println("4. Mostrar todas las ubicaciones registradas");
             System.out.println("5. Salir");
             System.out.print("Ingrese el número de la acción: ");
             int opcion = scanner.nextInt();
@@ -48,7 +49,11 @@ public class Main {
                     }
                     break;
                 case 4:
-                    System.out.println("Función no implementada aún.");
+                    System.out.println("----- Ubicaciones Registradas -----");
+                    Set<Ubicacion> ubicaciones = grafo.obtenerUbicaciones();
+                    for (Ubicacion ubicacion : ubicaciones) {
+                        System.out.println(ubicacion.getNombre());
+                    }
                     break;
                 case 5:
                     System.out.println("¡Hasta luego!");

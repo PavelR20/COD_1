@@ -109,5 +109,8 @@ class GrafoNoDirigido {
     public boolean existeUbicacion(Ubicacion ubicacion) {
         return listaAdyacencia.containsKey(ubicacion);
     }
-}
 
+    public Set<Ubicacion> obtenerUbicaciones() {
+        return listaAdyacencia.keySet();
+    }
+}
