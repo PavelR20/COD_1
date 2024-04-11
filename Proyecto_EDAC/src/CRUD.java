@@ -1,7 +1,7 @@
 import java.util.*;
 
 class Ubicacion {
-    private String nombre;
+    private final String nombre;
 
     public Ubicacion(String nombre) {
         this.nombre = nombre;
@@ -11,15 +11,11 @@ class Ubicacion {
         return nombre;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Ubicacion ubicacion = (Ubicacion) o;
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Ubicacion ubicacion = (Ubicacion) obj;
         return Objects.equals(nombre, ubicacion.nombre);
     }
 
@@ -30,15 +26,13 @@ class Ubicacion {
 
     @Override
     public String toString() {
-        return "Ubicacion{" +
-                "nombre='" + nombre + '\'' +
-                '}';
+        return nombre;
     }
 }
 
 class Arista {
-    private Ubicacion destino;
-    private int peso;
+    private final Ubicacion destino;
+    private final int peso;
 
     public Arista(Ubicacion destino, int peso) {
         this.destino = destino;
@@ -55,7 +49,7 @@ class Arista {
 }
 
 class GrafoNoDirigido {
-    private Map<Ubicacion, List<Arista>> listaAdyacencia;
+    private final Map<Ubicacion, List<Arista>> listaAdyacencia;
 
     public GrafoNoDirigido() {
         listaAdyacencia = new HashMap<>();
@@ -66,14 +60,17 @@ class GrafoNoDirigido {
     }
 
     public void agregarArista(Ubicacion origen, Ubicacion destino, int peso) {
-        if (!listaAdyacencia.containsKey(origen)) {
-            agregarUbicacion(origen);
+        if (!existeUbicacion(origen) || !existeUbicacion(destino)) {
+            System.out.println("Una o ambas ubicaciones no existen en el grafo.");
+            return;
         }
-        if (!listaAdyacencia.containsKey(destino)) {
-            agregarUbicacion(destino);
-        }
+
         listaAdyacencia.get(origen).add(new Arista(destino, peso));
-        listaAdyacencia.get(destino).add(new Arista(origen, peso));
+        listaAdyacencia.get(destino).add(new Arista(origen, peso)); // Para un grafo no dirigido
+    }
+
+    public boolean existeUbicacion(Ubicacion ubicacion) {
+        return listaAdyacencia.containsKey(ubicacion);
     }
 
     public Map<Ubicacion, Integer> rutaMasCorta(Ubicacion origen) {
@@ -109,22 +106,10 @@ class GrafoNoDirigido {
         return distancias;
     }
 
-    public void imprimirLista() {
-        for (Map.Entry<Ubicacion, List<Arista>> entry : listaAdyacencia.entrySet()) {
-            System.out.print("Ubicacion " + entry.getKey().getNombre() + " esta conectada con: ");
-            for (Arista arista : entry.getValue()) {
-                System.out.print(arista.getDestino().getNombre() + " (Peso: " + arista.getPeso() + ") ");
-            }
-            System.out.println();
+    public void imprimirUbicaciones() {
+        System.out.println("Ubicaciones en el grafo:");
+        for (Ubicacion ubicacion : listaAdyacencia.keySet()) {
+            System.out.println(ubicacion.getNombre());
         }
-    }
-
-    public boolean existeUbicacion(Ubicacion ubicacion) {
-        return listaAdyacencia.containsKey(ubicacion);
-    }
-
-
-    public Set<Ubicacion> obtenerUbicaciones() {
-        return listaAdyacencia.keySet();
     }
 }
