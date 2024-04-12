@@ -8,19 +8,19 @@ public class Main {
         Set<String> nombresUbicaciones = new HashSet<>();
 
         while (true) {
-            // Limpia la consola dependiendo del sistema operativo
+            // Limpiar la pantalla según el sistema operativo
             try {
                 if (System.getProperty("os.name").contains("Windows")) {
                     new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
                 } else {
-                    System.out.print("\033[H\033[2J");
-                    System.out.flush();
+                    new ProcessBuilder("clear").inheritIO().start().waitFor();
                 }
             } catch (IOException | InterruptedException ex) {
                 ex.printStackTrace();
             }
 
-            System.out.println("\n\n¿  ------Menu Principal-----   \n");
+            System.out.println("\n");
+            System.out.println("¿  ------Menu Principal-----   \n");
             System.out.println("¿   Qué acción desea realizar?            ");
             System.out.println("1.  Agregar ubicación                  ");
             System.out.println("2.  Agregar arista con peso              ");
@@ -36,14 +36,17 @@ public class Main {
             System.out.println("11. Salir                     ");
 
             System.out.print("\n Ingrese el número de la acción:");
+            System.out.println("\n");
+            System.out.println("\n");
+            System.out.println("\n");
             int opcion;
+
             try {
                 opcion = Integer.parseInt(scanner.nextLine());
             } catch (NumberFormatException e) {
                 System.out.println("Ingrese un número válido.");
                 continue;
             }
-
 
             switch (opcion) {
                 case 1:
