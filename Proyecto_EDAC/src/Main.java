@@ -12,7 +12,8 @@ public class Main {
             System.out.println("3. Calcular ruta más corta desde una ubicación");
             System.out.println("4.      Mostrar todas las ubicaciones         ");
             System.out.println("5.         Modificar Ubicaciones              ");
-            System.out.println("6.                 Salir                      ");
+            System.out.println("6.               Eliminar ubicacion           ");
+            System.out.println("7.                  Salir                     ");
             System.out.print("        Ingrese el número de la acción:");
 
             int opcion;
@@ -69,6 +70,27 @@ public class Main {
                     break;
                     
                 case 6:
+                    if (nombresUbicaciones.isEmpty()) {
+                        System.out.println("No hay ubicaciones agregadas para eliminar.");
+                        break;
+                    }
+                    System.out.print("Ingrese el nombre de la ubicación que desea eliminar: ");
+                    String nombreUbicacionEliminar = scanner.nextLine().toLowerCase();
+                    if (grafo.existeUbicacion(new Ubicacion(nombreUbicacionEliminar))) {
+                        System.out.print("¿Está seguro de eliminar la ubicación " + nombreUbicacionEliminar + "? (s/n): ");
+                        String confirmacion = scanner.nextLine().toLowerCase();
+                        if (confirmacion.equals("s")) {
+                            grafo.eliminarUbicacion(nombreUbicacionEliminar);
+                            nombresUbicaciones.remove(nombreUbicacionEliminar);
+                        } else {
+                            System.out.println("Operación de eliminación cancelada.");
+                        }
+                    } else {
+                        System.out.println("La ubicación que desea eliminar no existe en el grafo.");
+                    }
+                    break;
+                    
+                case 7:
                     System.out.println("¡Hasta luego!");
                     System.exit(0);
                 default:
