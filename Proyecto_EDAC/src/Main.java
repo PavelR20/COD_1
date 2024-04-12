@@ -6,13 +6,14 @@ public class Main {
         GrafoNoDirigido grafo = new GrafoNoDirigido();
 
         while (true) {
-            System.out.println("¿Qué acción desea realizar?");
-            System.out.println("1. Agregar ubicación");
-            System.out.println("2. Agregar arista con peso");
+            System.out.println("¿       Qué acción desea realizar?            ");
+            System.out.println("1.         Agregar ubicación                  ");
+            System.out.println("2.       Agregar arista con peso              ");
             System.out.println("3. Calcular ruta más corta desde una ubicación");
-            System.out.println("4. Mostrar todas las ubicaciones");
-            System.out.println("5. Salir");
-            System.out.print("Ingrese el número de la acción: ");
+            System.out.println("4.      Mostrar todas las ubicaciones         ");
+            System.out.println("5.         Modificar Ubicaciones              ");
+            System.out.println("6.                 Salir                      ");
+            System.out.print("        Ingrese el número de la acción:");
 
             int opcion;
             try {
@@ -54,7 +55,20 @@ public class Main {
                 case 4:
                     grafo.imprimirUbicaciones();
                     break;
+                    
                 case 5:
+                    System.out.print("Ingrese el nombre de la ubicación que desea modificar: ");
+                    String nombreUbicacionModificar = scanner.nextLine().toLowerCase();
+                    if (grafo.existeUbicacion(new Ubicacion(nombreUbicacionModificar))) {
+                        System.out.print("Ingrese el nuevo nombre para la ubicación: ");
+                        String nuevoNombreUbicacion = scanner.nextLine().toLowerCase();
+                        grafo.modificarUbicacion(nombreUbicacionModificar, nuevoNombreUbicacion);
+                    } else {
+                        System.out.println("La ubicación que desea modificar no existe en el grafo.");
+                    }
+                    break;
+                    
+                case 6:
                     System.out.println("¡Hasta luego!");
                     System.exit(0);
                 default:
