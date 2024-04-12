@@ -8,19 +8,19 @@ public class Main {
         Set<String> nombresUbicaciones = new HashSet<>();
 
         while (true) {
-            // Limpiar la pantalla según el sistema operativo
+            // Limpia la consola dependiendo del sistema operativo
             try {
                 if (System.getProperty("os.name").contains("Windows")) {
                     new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
                 } else {
-                    new ProcessBuilder("clear").inheritIO().start().waitFor();
+                    System.out.print("\033[H\033[2J");
+                    System.out.flush();
                 }
             } catch (IOException | InterruptedException ex) {
                 ex.printStackTrace();
             }
 
-            System.out.println("\n");
-            System.out.println("¿  ------Menu Principal-----   \n");
+            System.out.println("\n\n¿  ------Menu Principal-----   \n");
             System.out.println("¿   Qué acción desea realizar?            ");
             System.out.println("1.  Agregar ubicación                  ");
             System.out.println("2.  Agregar arista con peso              ");
@@ -28,25 +28,24 @@ public class Main {
             System.out.println("4.  Mostrar todas las ubicaciones         ");
             System.out.println("5.  Modificar Ubicaciones              ");
             System.out.println("6.  Eliminar ubicacion           ");
-            System.out.println("7.  Eliminar Peso       ");
-            System.out.println("8.  Modificar Peso                      ");
+            System.out.println("7.  Modificar Peso       ");
+            System.out.println("8.  Eliminar Peso                      ");
             System.out.println("9.  Calcular árbol de expansión mínima desde un punto de origen (Prim) ");
             System.out.println("10. Calcular árbol de expansión mínima desde un punto de origen (Kruskal)");
             System.out.println("\n");
-            System.out.println("11. Salir                     ");
+            System.out.println("11. Algoritmo Floyd-Warshall                   ");
+            System.out.println("12. Salir                     ");
+
 
             System.out.print("\n Ingrese el número de la acción:");
-            System.out.println("\n");
-            System.out.println("\n");
-            System.out.println("\n");
             int opcion;
-
             try {
                 opcion = Integer.parseInt(scanner.nextLine());
             } catch (NumberFormatException e) {
                 System.out.println("Ingrese un número válido.");
                 continue;
             }
+
 
             switch (opcion) {
                 case 1:
@@ -80,32 +79,39 @@ public class Main {
                         break;
                     }
 
-                    System.out.print("Ingrese el nombre del origen: ");
-                    String nombreOrigen = scanner.nextLine().toLowerCase();
-                    System.out.print("Ingrese el nombre del destino: ");
-                    String nombreDestino = scanner.nextLine().toLowerCase();
+                    boolean agregarMasPesos = true;
+                    while (agregarMasPesos) {
+                        System.out.print("Ingrese el nombre del origen: ");
+                        String nombreOrigen = scanner.nextLine().toLowerCase();
+                        System.out.print("Ingrese el nombre del destino: ");
+                        String nombreDestino = scanner.nextLine().toLowerCase();
 
+                        System.out.print("Ingrese el peso de la arista: ");
+                        int peso;
+                        try {
+                            peso = Integer.parseInt(scanner.nextLine());
+                        } catch (NumberFormatException ex) {
+                            System.out.println("Ingrese un número válido para el peso.");
+                            continue; // Volver al inicio del bucle para que el usuario pueda ingresar un peso válido
+                        }
 
+                        if (peso <= 0) {
+                            System.out.println("El peso debe ser un número positivo mayor que cero.");
+                            continue; // Volver al inicio del bucle para que el usuario pueda ingresar un peso válido
+                        }
 
-                    System.out.print("Ingrese el peso de la arista: ");
-                    int peso;
-                    try {
-                        peso = Integer.parseInt(scanner.nextLine());
-                    } catch (NumberFormatException ex) {
-                        System.out.println("Ingrese un número válido para el peso.");
-                        break;
-                    }
+                        if (grafo.existeArista(nombreOrigen, nombreDestino)) {
+                            System.out.println("Ya se ha agregado un peso para la arista entre " + nombreOrigen + " y " + nombreDestino + ".");
+                        } else {
+                            grafo.agregarArista(new Ubicacion(nombreOrigen), new Ubicacion(nombreDestino), peso);
+                            System.out.println("Arista agregada correctamente.");
+                        }
 
-                    if (peso <= 0) {
-                        System.out.println("El peso debe ser un número positivo mayor que cero.");
-                        break;
-                    }
-
-                    if (grafo.existeArista(nombreOrigen, nombreDestino)) {
-                        System.out.println("Ya se ha agregado un peso para la arista entre " + nombreOrigen + " y " + nombreDestino + ".");
-                    } else {
-                        grafo.agregarArista(new Ubicacion(nombreOrigen), new Ubicacion(nombreDestino), peso);
-                        System.out.println("Arista agregada correctamente.");
+                        System.out.print("¿Desea agregar otro peso? (s/n): ");
+                        String respuesta = scanner.nextLine().toLowerCase();
+                        if (!respuesta.equals("s")) {
+                            agregarMasPesos = false;
+                        }
                     }
                     break;
 
@@ -162,7 +168,7 @@ public class Main {
                     
                 case 7:
                 	 if (nombresUbicaciones.isEmpty()) {
-                         System.out.println("No hay pesos agregados para eliminar.");
+                         System.out.println("No hay pesos agregados para Modificarr.");
                          break;
                      }
                     System.out.print("Ingrese el nombre del origen: ");
@@ -176,7 +182,7 @@ public class Main {
                     
                 case 8:
                 	 if (nombresUbicaciones.isEmpty()) {
-                         System.out.println("No hay pesos agregadas para Modificar.");
+                         System.out.println("No hay pesos agregadas para Eliminar.");
                          break;
                      }
                     System.out.print("Ingrese el nombre del origen: ");
@@ -213,8 +219,22 @@ public class Main {
                         System.out.println("La ubicación de origen no existe en el grafo.");
                     }
                     break;
-
+                    
                 case 11:
+                    System.out.print("Ingrese el nombre de la ubicación de origen para el algoritmo de Floyd-Warshall: ");
+                    String nombreOrigenFloyd = scanner.nextLine().toLowerCase();
+                    Ubicacion ubicacionOrigenFloyd = new Ubicacion(nombreOrigenFloyd);
+                    if (grafo.existeUbicacion(ubicacionOrigenFloyd)) {
+                        System.out.println("Ejecutando el algoritmo de Floyd-Warshall...");
+                        int[][] matrizAdyacencia = grafo.generarMatrizAdyacencia(ubicacionOrigenFloyd); // Generar matriz de adyacencia
+                        AlgoritmosGrafo algoritmosGrafo = new AlgoritmosGrafo();
+                        int[][] distancias = algoritmosGrafo.floydWarshall(matrizAdyacencia); // Pasar la matriz de adyacencia a floydWarshall
+                        // Aquí puedes imprimir la matriz de distancias o hacer cualquier otra cosa con ella
+                    } else {
+                        System.out.println("La ubicación de origen no existe en el grafo.");
+                    }
+                    break;
+                case 12:
                     System.out.println("¡Hasta luego!");
                     System.exit(0);
                 default:

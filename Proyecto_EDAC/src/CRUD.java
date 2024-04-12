@@ -112,6 +112,7 @@ class GrafoNoDirigido {
         return !listaAdyacencia.isEmpty();
     }
 
+    
     public void modificarUbicacion(String nombreViejo, String nuevoNombre) {
         Ubicacion ubicacionVieja = new Ubicacion(nombreViejo);
         Ubicacion ubicacionNueva = new Ubicacion(nuevoNombre);
@@ -388,4 +389,29 @@ class AlgoritmosGrafo {
             this.distance = distance;
         }
     }
+
+    public int[][] floydWarshall(int[][] graph) {
+        int n = graph.length;
+        int[][] dist = new int[n][n];
+
+        // Inicializar distancias con la matriz de adyacencia
+        for (int i = 0; i < n; i++) {
+            System.arraycopy(graph[i], 0, dist[i], 0, n);
+        }
+
+        // Aplicar el algoritmo de Floyd-Warshall
+        for (int k = 0; k < n; k++) {
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++) {
+                    if (dist[i][k] != INF && dist[k][j] != INF && dist[i][k] + dist[k][j] < dist[i][j]) {
+                        dist[i][j] = dist[i][k] + dist[k][j];
+                    }
+                }
+            }
+        }
+
+        return dist;
+    }
+    
+    
 }
