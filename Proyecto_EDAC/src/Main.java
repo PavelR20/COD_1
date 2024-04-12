@@ -59,10 +59,7 @@ public class Main {
                     System.out.print("Ingrese el nombre del destino: ");
                     String nombreDestino = scanner.nextLine().toLowerCase();
 
-                    if (!nombresUbicaciones.contains(nombreOrigen) || !nombresUbicaciones.contains(nombreDestino)) {
-                        System.out.println("Uno o ambos nombres de ubicación no existen en el grafo.");
-                        break;
-                    }
+                   
 
                     System.out.print("Ingrese el peso de la arista: ");
                     int peso;
