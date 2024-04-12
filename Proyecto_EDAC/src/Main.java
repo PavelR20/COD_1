@@ -32,8 +32,8 @@ public class Main {
             System.out.println("8.  Eliminar Peso                      ");
             System.out.println("9.  Calcular árbol de expansión mínima desde un punto de origen (Prim) ");
             System.out.println("10. Calcular árbol de expansión mínima desde un punto de origen (Kruskal)");
-            System.out.println("\n");
             System.out.println("11. Algoritmo Floyd-Warshall                   ");
+            System.out.println("\n");
             System.out.println("12. Salir                     ");
 
 
