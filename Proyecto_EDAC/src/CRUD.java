@@ -90,6 +90,23 @@ class GrafoNoDirigido {
         System.out.println("Ubicación modificada exitosamente de " + nombreViejo + " a " + nuevoNombre + ".");
     }
 
+    
+    public void eliminarUbicacion(String nombreUbicacion) {
+        Ubicacion ubicacionEliminar = new Ubicacion(nombreUbicacion);
+
+        if (!existeUbicacion(ubicacionEliminar)) {
+            System.out.println("La ubicación a eliminar no existe en el grafo.");
+            return;
+        }
+
+        listaAdyacencia.remove(ubicacionEliminar);
+        for (List<Arista> aristas : listaAdyacencia.values()) {
+            aristas.removeIf(arista -> arista.getDestino().equals(ubicacionEliminar));
+        }
+
+        System.out.println("Ubicación " + nombreUbicacion + " eliminada exitosamente.");
+    }
+    
     public void agregarUbicacion(Ubicacion ubicacion) {
         listaAdyacencia.put(ubicacion, new ArrayList<>());
     }
