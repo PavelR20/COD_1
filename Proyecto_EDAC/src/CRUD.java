@@ -31,12 +31,14 @@ class Ubicacion {
 }
 
 class Arista {
-    private final Ubicacion destino;
+    private Ubicacion destino;
     private final int peso;
 
     public Arista(Ubicacion destino, int peso) {
         this.destino = destino;
         this.peso = peso;
+        
+      
     }
 
     public Ubicacion getDestino() {
@@ -46,6 +48,11 @@ class Arista {
     public int getPeso() {
         return peso;
     }
+
+	public void setDestino(Ubicacion destino) {
+		
+		 this.destino = destino;
+	}
 }
 
 
@@ -54,6 +61,33 @@ class GrafoNoDirigido {
 
     public GrafoNoDirigido() {
         listaAdyacencia = new HashMap<>();
+    }
+    
+    public void modificarUbicacion(String nombreViejo, String nuevoNombre) {
+        Ubicacion ubicacionVieja = new Ubicacion(nombreViejo);
+        Ubicacion ubicacionNueva = new Ubicacion(nuevoNombre);
+
+        if (!existeUbicacion(ubicacionVieja)) {
+            System.out.println("La ubicación a modificar no existe en el grafo.");
+            return;
+        }
+
+        if (existeUbicacion(ubicacionNueva)) {
+            System.out.println("Ya existe una ubicación con el nuevo nombre en el grafo.");
+            return;
+        }
+
+        listaAdyacencia.put(ubicacionNueva, listaAdyacencia.remove(ubicacionVieja));
+        for (Ubicacion ubicacion : listaAdyacencia.keySet()) {
+            List<Arista> aristas = listaAdyacencia.get(ubicacion);
+            for (Arista arista : aristas) {
+                if (arista.getDestino().equals(ubicacionVieja)) {
+                    arista.setDestino(ubicacionNueva);
+                }
+            }
+        }
+
+        System.out.println("Ubicación modificada exitosamente de " + nombreViejo + " a " + nuevoNombre + ".");
     }
 
     public void agregarUbicacion(Ubicacion ubicacion) {
