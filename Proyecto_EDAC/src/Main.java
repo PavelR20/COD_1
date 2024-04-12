@@ -7,13 +7,15 @@ public class Main {
 
         while (true) {
             System.out.println("¿       Qué acción desea realizar?            ");
-            System.out.println("1.         Agregar ubicación                  ");
-            System.out.println("2.       Agregar arista con peso              ");
-            System.out.println("3. Calcular ruta más corta desde una ubicación");
+            System.out.println("1.           Agregar ubicación                  ");
+            System.out.println("2.         Agregar arista con peso              ");
+            System.out.println("3.  Calcular ruta más corta desde una ubicación");
             System.out.println("4.      Mostrar todas las ubicaciones         ");
             System.out.println("5.         Modificar Ubicaciones              ");
-            System.out.println("6.               Eliminar ubicacion           ");
-            System.out.println("7.                  Salir                     ");
+            System.out.println("6.            Eliminar ubicacion           ");
+            System.out.println("7.             Modificar Peso            ");
+            System.out.println("8.              Eliminar Peso                     ");
+            System.out.println("9.                  Salir                     ");
             System.out.print("        Ingrese el número de la acción:");
 
             int opcion;
@@ -91,6 +93,24 @@ public class Main {
                     break;
                     
                 case 7:
+                    System.out.print("Ingrese el nombre del origen: ");
+                    String nombreOrigenModificarPeso = scanner.nextLine().toLowerCase();
+                    System.out.print("Ingrese el nombre del destino: ");
+                    String nombreDestinoModificarPeso = scanner.nextLine().toLowerCase();
+                    System.out.print("Ingrese el nuevo peso para la arista: ");
+                    int nuevoPeso = Integer.parseInt(scanner.nextLine());
+                    grafo.modificarPesoArista(nombreOrigenModificarPeso, nombreDestinoModificarPeso, nuevoPeso);
+                    break;
+                    
+                case 8:
+                    System.out.print("Ingrese el nombre del origen: ");
+                    String nombreOrigenEliminarArista = scanner.nextLine().toLowerCase();
+                    System.out.print("Ingrese el nombre del destino: ");
+                    String nombreDestinoEliminarArista = scanner.nextLine().toLowerCase();
+                    grafo.eliminarArista(nombreOrigenEliminarArista, nombreDestinoEliminarArista);
+                    break;
+                    
+                case 9:
                     System.out.println("¡Hasta luego!");
                     System.exit(0);
                 default:
