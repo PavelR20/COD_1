@@ -4,6 +4,7 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         GrafoNoDirigido grafo = new GrafoNoDirigido();
+        Set<String> nombresUbicaciones = new HashSet<>();
 
         while (true) {
             System.out.println("¿Qué acción desea realizar?");
@@ -24,10 +25,25 @@ public class Main {
 
             switch (opcion) {
                 case 1:
-                    System.out.print("Ingrese el nombre de la ubicación: ");
-                    String nombreUbicacion = scanner.nextLine().toLowerCase();
-                    grafo.agregarUbicacion(new Ubicacion(nombreUbicacion));
+                    boolean agregarMasUbicaciones = true;
+                    while (agregarMasUbicaciones) {
+                        System.out.print("Ingrese el nombre de la ubicación: ");
+                        String nombreUbicacion = scanner.nextLine().toLowerCase();
+                        if (nombresUbicaciones.contains(nombreUbicacion)) {
+                            System.out.println("La ubicación ya ha sido agregada anteriormente.");
+                        } else {
+                            nombresUbicaciones.add(nombreUbicacion);
+                            grafo.agregarUbicacion(new Ubicacion(nombreUbicacion));
+                        }
+
+                        System.out.print("¿Desea agregar otra ubicación? (s/n): ");
+                        String respuesta = scanner.nextLine().toLowerCase();
+                        if (!respuesta.equals("s")) {
+                            agregarMasUbicaciones = false;
+                        }
+                    }
                     break;
+
                 case 2:
                     System.out.print("Ingrese el nombre del origen: ");
                     String nombreOrigen = scanner.nextLine().toLowerCase();
@@ -61,5 +77,5 @@ public class Main {
                     System.out.println("Opción inválida! Por favor, ingrese un número del 1 al 5.");
             }
         }
-    }
+    }  
 }
