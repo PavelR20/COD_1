@@ -49,48 +49,43 @@ public class Main {
                     break;
 
                 case 2:
-                	
-                	 if (nombresUbicaciones.isEmpty()) {
-                         System.out.println("No hay ubicaciones agregadas para asignarle un peso.");
-                         break;
-                     }
-                	 
+                    if (nombresUbicaciones.isEmpty()) {
+                        System.out.println("No hay ubicaciones agregadas para asignarle un peso.");
+                        break;
+                    }
+
                     System.out.print("Ingrese el nombre del origen: ");
                     String nombreOrigen = scanner.nextLine().toLowerCase();
                     System.out.print("Ingrese el nombre del destino: ");
                     String nombreDestino = scanner.nextLine().toLowerCase();
-                    
-                    if (!nombreOrigen.isEmpty() && !nombreDestino.isEmpty()) {
-                        if (!nombresUbicaciones.contains(nombreOrigen) || !nombresUbicaciones.contains(nombreDestino)) {
-                            System.out.println("Uno o ambos nombres de ubicación no existen en el grafo.");
-                            break;
-                        }
-                        
-                        System.out.print("Ingrese el peso de la arista: ");
-                        int peso;
-                        try {
-                            peso = Integer.parseInt(scanner.nextLine());
-                        } catch (NumberFormatException ex) {
-                            System.out.println("Ingrese un número válido para el peso.");
-                            break;
-                        }
-                        
-                        if (peso <= 0) {
-                            System.out.println("El peso debe ser un número positivo mayor que cero.");
-                            break;
-                        }
-                        
-                        if (grafo.existeArista(nombreOrigen, nombreDestino)) {
-                            System.out.println("Ya se ha agregado un peso para la arista entre " + nombreOrigen + " y " + nombreDestino + ".");
-                        } else {
-                            grafo.agregarArista(new Ubicacion(nombreOrigen), new Ubicacion(nombreDestino), peso);
-                            System.out.println("Arista agregada correctamente.");
-                        }
+
+                    if (!nombresUbicaciones.contains(nombreOrigen) || !nombresUbicaciones.contains(nombreDestino)) {
+                        System.out.println("Uno o ambos nombres de ubicación no existen en el grafo.");
+                        break;
+                    }
+
+                    System.out.print("Ingrese el peso de la arista: ");
+                    int peso;
+                    try {
+                        peso = Integer.parseInt(scanner.nextLine());
+                    } catch (NumberFormatException ex) {
+                        System.out.println("Ingrese un número válido para el peso.");
+                        break;
+                    }
+
+                    if (peso <= 0) {
+                        System.out.println("El peso debe ser un número positivo mayor que cero.");
+                        break;
+                    }
+
+                    if (grafo.existeArista(nombreOrigen, nombreDestino)) {
+                        System.out.println("Ya se ha agregado un peso para la arista entre " + nombreOrigen + " y " + nombreDestino + ".");
                     } else {
-                        System.out.println("Ingrese nombres válidos para el origen y el destino.");
+                        grafo.agregarArista(new Ubicacion(nombreOrigen), new Ubicacion(nombreDestino), peso);
+                        System.out.println("Arista agregada correctamente.");
                     }
                     break;
-                    
+
                 case 3:
                     System.out.print("Ingrese el nombre de la ubicación de origen: ");
                     String nombreOrigenRuta = scanner.nextLine().toLowerCase();
