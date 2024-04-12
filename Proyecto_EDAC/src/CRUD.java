@@ -48,6 +48,7 @@ class Arista {
     }
 }
 
+
 class GrafoNoDirigido {
     private final Map<Ubicacion, List<Arista>> listaAdyacencia;
 
