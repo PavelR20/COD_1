@@ -116,66 +116,57 @@ class GrafoNoDirigido {
         System.out.println("Ubicación " + nombreUbicacion + " eliminada exitosamente.");
     }
     
-    public void eliminarArista(String origen, String destino) {
-        if (!hayUbicaciones()) {
-            System.out.println("No hay ubicaciones para modificar o eliminar el peso.");
-            return;
-        }
-        
+    
+    public boolean existeArista(String origen, String destino) {
         Ubicacion ubicacionOrigen = new Ubicacion(origen);
         Ubicacion ubicacionDestino = new Ubicacion(destino);
 
         if (!existeUbicacion(ubicacionOrigen) || !existeUbicacion(ubicacionDestino)) {
-            System.out.println("Una o ambas ubicaciones no existen en el grafo.");
-            return;
+            return false;
         }
 
         List<Arista> aristasOrigen = listaAdyacencia.get(ubicacionOrigen);
-        boolean aristaEliminada = false;
         for (Arista arista : aristasOrigen) {
             if (arista.getDestino().equals(ubicacionDestino)) {
-                aristaEliminada = true;
-                aristasOrigen.remove(arista);
-                System.out.println("Arista eliminada entre " + origen + " y " + destino + ".");
-                break;
+                return true;
             }
         }
 
-        if (!aristaEliminada) {
-            System.out.println("No hay una arista entre " + origen + " y " + destino + " para eliminar.");
-        }
+        return false;
     }
+    public void eliminarArista(String origen, String destino) {
+        if (!existeArista(origen, destino)) {
+            System.out.println("No existe una arista entre " + origen + " y " + destino + " para eliminar.");
+            return;
+        }
+
+        Ubicacion ubicacionOrigen = new Ubicacion(origen);
+        Ubicacion ubicacionDestino = new Ubicacion(destino);
+
+        List<Arista> aristasOrigen = listaAdyacencia.get(ubicacionOrigen);
+        aristasOrigen.removeIf(arista -> arista.getDestino().equals(ubicacionDestino));
+        System.out.println("Arista entre " + origen + " y " + destino + " eliminada exitosamente.");
+    }
+
     
     public void modificarPesoArista(String origen, String destino, int nuevoPeso) {
-        if (!hayUbicaciones()) {
-            System.out.println("No hay ubicaciones para modificar o eliminar el peso.");
+        if (!existeArista(origen, destino)) {
+            System.out.println("No existe una arista entre " + origen + " y " + destino + ".");
             return;
         }
-        
+
         Ubicacion ubicacionOrigen = new Ubicacion(origen);
         Ubicacion ubicacionDestino = new Ubicacion(destino);
 
-        if (!existeUbicacion(ubicacionOrigen) || !existeUbicacion(ubicacionDestino)) {
-            System.out.println("Una o ambas ubicaciones no existen en el grafo.");
-            return;
-        }
-
         List<Arista> aristasOrigen = listaAdyacencia.get(ubicacionOrigen);
-        boolean aristaEncontrada = false;
         for (Arista arista : aristasOrigen) {
             if (arista.getDestino().equals(ubicacionDestino)) {
-                aristaEncontrada = true;
                 arista.setPeso(nuevoPeso);
-                System.out.println("Peso de la arista modificada de " + origen + " a " + destino + " a " + nuevoPeso + ".");
+                System.out.println("Peso de la arista entre " + origen + " y " + destino + " modificado a " + nuevoPeso + ".");
                 break;
             }
         }
-
-        if (!aristaEncontrada) {
-            System.out.println("No hay una arista entre " + origen + " y " + destino + " para modificar.");
-        }
     }
-    
     
     public void agregarUbicacion(Ubicacion ubicacion) {
         listaAdyacencia.put(ubicacion, new ArrayList<>());

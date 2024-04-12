@@ -13,8 +13,8 @@ public class Main {
             System.out.println("4.      Mostrar todas las ubicaciones         ");
             System.out.println("5.         Modificar Ubicaciones              ");
             System.out.println("6.            Eliminar ubicacion           ");
-            System.out.println("7.             Modificar Peso            ");
-            System.out.println("8.              Eliminar Peso                     ");
+            System.out.println("7.              Eliminar Peso       ");
+            System.out.println("8.              Modificar Peso                      ");
             System.out.println("9.                  Salir                     ");
             System.out.print("        Ingrese el número de la acción:");
 
@@ -33,14 +33,48 @@ public class Main {
                     grafo.agregarUbicacion(new Ubicacion(nombreUbicacion));
                     break;
                 case 2:
+                	
+                	 if (nombresUbicaciones.isEmpty()) {
+                         System.out.println("No hay ubicaciones agregadas para asignarle un peso.");
+                         break;
+                     }
+                	 
                     System.out.print("Ingrese el nombre del origen: ");
                     String nombreOrigen = scanner.nextLine().toLowerCase();
                     System.out.print("Ingrese el nombre del destino: ");
                     String nombreDestino = scanner.nextLine().toLowerCase();
-                    System.out.print("Ingrese el peso de la arista: ");
-                    int peso = Integer.parseInt(scanner.nextLine());
-                    grafo.agregarArista(new Ubicacion(nombreOrigen), new Ubicacion(nombreDestino), peso);
+                    
+                    if (!nombreOrigen.isEmpty() && !nombreDestino.isEmpty()) {
+                        if (!nombresUbicaciones.contains(nombreOrigen) || !nombresUbicaciones.contains(nombreDestino)) {
+                            System.out.println("Uno o ambos nombres de ubicación no existen en el grafo.");
+                            break;
+                        }
+                        
+                        System.out.print("Ingrese el peso de la arista: ");
+                        int peso;
+                        try {
+                            peso = Integer.parseInt(scanner.nextLine());
+                        } catch (NumberFormatException ex) {
+                            System.out.println("Ingrese un número válido para el peso.");
+                            break;
+                        }
+                        
+                        if (peso <= 0) {
+                            System.out.println("El peso debe ser un número positivo mayor que cero.");
+                            break;
+                        }
+                        
+                        if (grafo.existeArista(nombreOrigen, nombreDestino)) {
+                            System.out.println("Ya se ha agregado un peso para la arista entre " + nombreOrigen + " y " + nombreDestino + ".");
+                        } else {
+                            grafo.agregarArista(new Ubicacion(nombreOrigen), new Ubicacion(nombreDestino), peso);
+                            System.out.println("Arista agregada correctamente.");
+                        }
+                    } else {
+                        System.out.println("Ingrese nombres válidos para el origen y el destino.");
+                    }
                     break;
+                    
                 case 3:
                     System.out.print("Ingrese el nombre de la ubicación de origen: ");
                     String nombreOrigenRuta = scanner.nextLine().toLowerCase();
@@ -93,6 +127,10 @@ public class Main {
                     break;
                     
                 case 7:
+                	 if (nombresUbicaciones.isEmpty()) {
+                         System.out.println("No hay pesos agregados para eliminar.");
+                         break;
+                     }
                     System.out.print("Ingrese el nombre del origen: ");
                     String nombreOrigenModificarPeso = scanner.nextLine().toLowerCase();
                     System.out.print("Ingrese el nombre del destino: ");
@@ -103,6 +141,10 @@ public class Main {
                     break;
                     
                 case 8:
+                	 if (nombresUbicaciones.isEmpty()) {
+                         System.out.println("No hay pesos agregadas para Modificar.");
+                         break;
+                     }
                     System.out.print("Ingrese el nombre del origen: ");
                     String nombreOrigenEliminarArista = scanner.nextLine().toLowerCase();
                     System.out.print("Ingrese el nombre del destino: ");
