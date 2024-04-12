@@ -69,12 +69,18 @@ class Ubicacion {
 }
 
 class Arista {
+    private Ubicacion origen; // Se agrega un campo para la ubicación de origen
     private Ubicacion destino;
     private int peso;
 
-    public Arista(Ubicacion destino, int peso) {
+    public Arista(Ubicacion origen, Ubicacion destino, int peso) {
+        this.origen = origen;
         this.destino = destino;
         this.peso = peso;
+    }
+
+    public Ubicacion getOrigen() {
+        return origen;
     }
 
     public Ubicacion getDestino() {
@@ -93,6 +99,7 @@ class Arista {
         this.peso = nuevoPeso;
     }
 }
+
 
 class GrafoNoDirigido {
     private final Map<Ubicacion, List<Arista>> listaAdyacencia;
@@ -212,8 +219,9 @@ class GrafoNoDirigido {
             return;
         }
 
-        listaAdyacencia.get(origen).add(new Arista(destino, peso));
-        listaAdyacencia.get(destino).add(new Arista(origen, peso));
+        listaAdyacencia.get(origen).add(new Arista(origen, destino, peso)); // Usando getOrigen()
+        listaAdyacencia.get(destino).add(new Arista(destino, origen, peso)); // Usando getDestino()
+
     }
 
     public boolean existeUbicacion(Ubicacion ubicacion) {
@@ -229,7 +237,7 @@ class GrafoNoDirigido {
             distancias.put(ubicacion, Integer.MAX_VALUE);
         }
         distancias.put(origen, 0);
-        colaPrioridad.offer(new Arista(origen, 0));
+        colaPrioridad.offer(new Arista(origen, origen, 0)); // Usando getOrigen() para origen y destino
 
         while (!colaPrioridad.isEmpty()) {
             Arista aristaActual = colaPrioridad.poll();
@@ -245,7 +253,8 @@ class GrafoNoDirigido {
                 if (!visitados.contains(vecino) && distancias.get(actual) != Integer.MAX_VALUE
                         && distancias.get(actual) + peso < distancias.get(vecino)) {
                     distancias.put(vecino, distancias.get(actual) + peso);
-                    colaPrioridad.offer(new Arista(vecino, distancias.get(vecino)));
+                    colaPrioridad.offer(new Arista(actual, vecino, distancias.get(vecino)));
+
                 }
             }
         }
@@ -267,14 +276,15 @@ class GrafoNoDirigido {
 
         while (!colaAristas.isEmpty() && arbolExpansionMinima.size() < listaAdyacencia.size() - 1) {
             Arista arista = colaAristas.poll();
-            Ubicacion origen = arista.getDestino(); // Corregido: se cambió getOrigen() por getDestino()
-            Ubicacion destino = arista.getDestino();
+            Ubicacion origen = arista.getOrigen(); // Se obtiene la ubicación de origen de la arista
+            Ubicacion destino = arista.getDestino(); // Se obtiene la ubicación de destino de la arista
 
             if (disjointSet.find(origen) != disjointSet.find(destino)) {
                 arbolExpansionMinima.add(arista);
                 disjointSet.union(origen, destino);
             }
         }
+
 
         return arbolExpansionMinima;
     }
