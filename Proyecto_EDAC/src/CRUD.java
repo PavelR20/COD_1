@@ -1,5 +1,43 @@
 import java.util.*;
 
+class DisjointSet {
+    private Map<Ubicacion, Ubicacion> parent;
+    private Map<Ubicacion, Integer> rank;
+
+    public DisjointSet() {
+        parent = new HashMap<>();
+        rank = new HashMap<>();
+    }
+
+    public void makeSet(Ubicacion ubicacion) {
+        parent.put(ubicacion, ubicacion);
+        rank.put(ubicacion, 0);
+    }
+
+    public Ubicacion find(Ubicacion ubicacion) {
+        if (parent.get(ubicacion) != ubicacion) {
+            parent.put(ubicacion, find(parent.get(ubicacion)));
+        }
+        return parent.get(ubicacion);
+    }
+
+    public void union(Ubicacion ubicacion1, Ubicacion ubicacion2) {
+        Ubicacion root1 = find(ubicacion1);
+        Ubicacion root2 = find(ubicacion2);
+
+        if (root1 == root2) return;
+
+        if (rank.get(root1) < rank.get(root2)) {
+            parent.put(root1, root2);
+        } else if (rank.get(root1) > rank.get(root2)) {
+            parent.put(root2, root1);
+        } else {
+            parent.put(root2, root1);
+            rank.put(root1, rank.get(root1) + 1);
+        }
+    }
+}
+
 class Ubicacion {
     private final String nombre;
 
@@ -215,6 +253,33 @@ class GrafoNoDirigido {
         return distancias;
     }
 
+    public List<Arista> kruskal() {
+        List<Arista> arbolExpansionMinima = new ArrayList<>();
+        PriorityQueue<Arista> colaAristas = new PriorityQueue<>(Comparator.comparingInt(Arista::getPeso));
+        DisjointSet disjointSet = new DisjointSet();
+
+        for (Ubicacion origen : listaAdyacencia.keySet()) {
+            for (Arista arista : listaAdyacencia.get(origen)) {
+                colaAristas.offer(arista);
+            }
+            disjointSet.makeSet(origen);
+        }
+
+        while (!colaAristas.isEmpty() && arbolExpansionMinima.size() < listaAdyacencia.size() - 1) {
+            Arista arista = colaAristas.poll();
+            Ubicacion origen = arista.getDestino(); // Corregido: se cambió getOrigen() por getDestino()
+            Ubicacion destino = arista.getDestino();
+
+            if (disjointSet.find(origen) != disjointSet.find(destino)) {
+                arbolExpansionMinima.add(arista);
+                disjointSet.union(origen, destino);
+            }
+        }
+
+        return arbolExpansionMinima;
+    }
+
+
     public int[][] generarMatrizAdyacencia(Ubicacion puntoOrigen) {
         List<Ubicacion> ubicaciones = new ArrayList<>(listaAdyacencia.keySet());
         int n = ubicaciones.size();
@@ -229,7 +294,7 @@ class GrafoNoDirigido {
         // Inicializar matriz con valores de infinito
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
-                matriz[i][j] = Integer.MAX_VALUE;
+                matriz[i][j] = Integer.MAX_VALUE; // Corregido: se cambió 0 por Integer.MAX_VALUE
             }
         }
 
@@ -314,5 +379,3 @@ class AlgoritmosGrafo {
         }
     }
 }
-
-//

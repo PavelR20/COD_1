@@ -7,19 +7,27 @@ public class Main {
         Set<String> nombresUbicaciones = new HashSet<>();
 
         while (true) {
-            System.out.println("¿       Qué acción desea realizar?            ");
-            System.out.println("1.           Agregar ubicación                  ");
-            System.out.println("2.         Agregar arista con peso              ");
+            System.out.println("\n");
+            System.out.println("\n");
+            System.out.println("¿  ------Menu Principal-----   \n");
+            System.out.println("¿   Qué acción desea realizar?            ");
+            System.out.println("1.  Agregar ubicación                  ");
+            System.out.println("2.  Agregar arista con peso              ");
             System.out.println("3.  Calcular ruta más corta desde una ubicación");
-            System.out.println("4.      Mostrar todas las ubicaciones         ");
-            System.out.println("5.         Modificar Ubicaciones              ");
-            System.out.println("6.            Eliminar ubicacion           ");
-            System.out.println("7.              Eliminar Peso       ");
-            System.out.println("8.              Modificar Peso                      ");
-            System.out.println("9.         Calcular árbol de expansión mínima desde un punto de origen (Prim) ");
-            System.out.println("10.                  Salir                     ");
-            System.out.print("        Ingrese el número de la acción:");
+            System.out.println("4.  Mostrar todas las ubicaciones         ");
+            System.out.println("5.  Modificar Ubicaciones              ");
+            System.out.println("6.  Eliminar ubicacion           ");
+            System.out.println("7.  Eliminar Peso       ");
+            System.out.println("8.  Modificar Peso                      ");
+            System.out.println("9.  Calcular árbol de expansión mínima desde un punto de origen (Prim) ");
+            System.out.println("10. Calcular árbol de expansión mínima desde un punto de origen (Kruskal)");
+            System.out.println("\n");
+            System.out.println("11. Salir                     ");
 
+            System.out.print("\n Ingrese el número de la acción:");
+            System.out.println("\n");
+            System.out.println("\n");
+            System.out.println("\n");
             int opcion;
             try {
                 opcion = Integer.parseInt(scanner.nextLine());
@@ -177,9 +185,24 @@ public class Main {
                         System.out.println("La ubicación de origen no existe en el grafo.");
                     }
                     break;
-                case 25:
-                    break;
                 case 10:
+                    System.out.print("Ingrese el nombre de la ubicación de origen para el Árbol de Expansión Mínima (Kruskal): ");
+                    String nombreOrigenKruskal = scanner.nextLine().toLowerCase();
+                    Ubicacion ubicacionOrigenKruskal = new Ubicacion(nombreOrigenKruskal);
+                    if (grafo.existeUbicacion(ubicacionOrigenKruskal)) {
+                        List<Arista> arbolExpansionMinima = grafo.kruskal();
+                        int totalWeight = 0;
+                        for (Arista arista : arbolExpansionMinima) {
+                            System.out.println(arista.getDestino().getNombre() + " - " + arista.getDestino().getNombre() + ": " + arista.getPeso());
+                            totalWeight += arista.getPeso();
+                        }
+                        System.out.println("Peso total del árbol de expansión mínima desde " + nombreOrigenKruskal + ": " + totalWeight);
+                    } else {
+                        System.out.println("La ubicación de origen no existe en el grafo.");
+                    }
+                    break;
+
+                case 11:
                     System.out.println("¡Hasta luego!");
                     System.exit(0);
                 default:
