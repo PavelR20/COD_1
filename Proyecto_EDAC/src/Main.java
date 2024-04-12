@@ -4,6 +4,7 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         GrafoNoDirigido grafo = new GrafoNoDirigido();
+        Set<String> nombresUbicaciones = new HashSet<>();
 
         while (true) {
             System.out.println("¿       Qué acción desea realizar?            ");
@@ -15,7 +16,8 @@ public class Main {
             System.out.println("6.            Eliminar ubicacion           ");
             System.out.println("7.              Eliminar Peso       ");
             System.out.println("8.              Modificar Peso                      ");
-            System.out.println("9.                  Salir                     ");
+            System.out.println("9.         Calcular árbol de expansión mínima desde un punto de origen (Prim) ");
+            System.out.println("10.                  Salir                     ");
             System.out.print("        Ingrese el número de la acción:");
 
             int opcion;
@@ -28,10 +30,30 @@ public class Main {
 
             switch (opcion) {
                 case 1:
+
                     System.out.print("Ingrese el nombre de la ubicación: ");
                     String nombreUbicacion = scanner.nextLine().toLowerCase();
                     grafo.agregarUbicacion(new Ubicacion(nombreUbicacion));
+                    boolean agregarMasUbicaciones = true;
+                    while (agregarMasUbicaciones) {
+                        System.out.print("Ingrese el nombre de la ubicación: ");
+                        nombreUbicacion = scanner.nextLine().toLowerCase();
+                        if (nombresUbicaciones.contains(nombreUbicacion)) {
+                            System.out.println("La ubicación ya ha sido agregada anteriormente.");
+                        } else {
+                            nombresUbicaciones.add(nombreUbicacion);
+                            grafo.agregarUbicacion(new Ubicacion(nombreUbicacion));
+                        }
+
+                        System.out.print("¿Desea agregar otra ubicación? (s/n): ");
+                        String respuesta = scanner.nextLine().toLowerCase();
+                        if (!respuesta.equals("s")) {
+                            agregarMasUbicaciones = false;
+                        }
+                    }
+
                     break;
+
                 case 2:
                     if (nombresUbicaciones.isEmpty()) {
                         System.out.println("No hay ubicaciones agregadas para asignarle un peso.");
@@ -43,7 +65,7 @@ public class Main {
                     System.out.print("Ingrese el nombre del destino: ");
                     String nombreDestino = scanner.nextLine().toLowerCase();
 
-                   
+
 
                     System.out.print("Ingrese el peso de la arista: ");
                     int peso;
@@ -143,13 +165,24 @@ public class Main {
                     String nombreDestinoEliminarArista = scanner.nextLine().toLowerCase();
                     grafo.eliminarArista(nombreOrigenEliminarArista, nombreDestinoEliminarArista);
                     break;
-                    
                 case 9:
+                    System.out.print("Ingrese el nombre de la ubicación de origen para el Árbol de Expansión Mínima (Prim): ");
+                    String nombreOrigenPrim = scanner.nextLine().toLowerCase();
+                    Ubicacion ubicacionOrigenPrim = new Ubicacion(nombreOrigenPrim);
+                    if (grafo.existeUbicacion(ubicacionOrigenPrim)) {
+                        AlgoritmosGrafo algoritmos = new AlgoritmosGrafo();
+                        int mstWeight = algoritmos.prim(grafo.generarMatrizAdyacencia(ubicacionOrigenPrim));
+                        System.out.println("Peso del árbol de expansión mínima desde " + nombreOrigenPrim + ": " + mstWeight);
+                    } else {
+                        System.out.println("La ubicación de origen no existe en el grafo.");
+                    }
+                    break;
+                case 10:
                     System.out.println("¡Hasta luego!");
                     System.exit(0);
                 default:
                     System.out.println("Opción inválida! Por favor, ingrese un número del 1 al 5.");
             }
         }
-    }
+    }  
 }

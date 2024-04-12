@@ -37,8 +37,6 @@ class Arista {
     public Arista(Ubicacion destino, int peso) {
         this.destino = destino;
         this.peso = peso;
-        
-      
     }
 
     public Ubicacion getDestino() {
@@ -49,17 +47,14 @@ class Arista {
         return peso;
     }
 
-	public void setDestino(Ubicacion destino) {
-		
-		 this.destino = destino;
-	}
+    public void setDestino(Ubicacion destino) {
+        this.destino = destino;
+    }
 
-	public void setPeso(int nuevoPeso) {
-		this.peso = nuevoPeso;
-		
-	}
+    public void setPeso(int nuevoPeso) {
+        this.peso = nuevoPeso;
+    }
 }
-
 
 class GrafoNoDirigido {
     private final Map<Ubicacion, List<Arista>> listaAdyacencia;
@@ -67,11 +62,11 @@ class GrafoNoDirigido {
     public GrafoNoDirigido() {
         listaAdyacencia = new HashMap<>();
     }
-    
+
     public boolean hayUbicaciones() {
         return !listaAdyacencia.isEmpty();
     }
-    
+
     public void modificarUbicacion(String nombreViejo, String nuevoNombre) {
         Ubicacion ubicacionVieja = new Ubicacion(nombreViejo);
         Ubicacion ubicacionNueva = new Ubicacion(nuevoNombre);
@@ -99,7 +94,7 @@ class GrafoNoDirigido {
         System.out.println("Ubicación modificada exitosamente de " + nombreViejo + " a " + nuevoNombre + ".");
     }
 
-    
+
     public void eliminarUbicacion(String nombreUbicacion) {
         Ubicacion ubicacionEliminar = new Ubicacion(nombreUbicacion);
 
@@ -115,8 +110,8 @@ class GrafoNoDirigido {
 
         System.out.println("Ubicación " + nombreUbicacion + " eliminada exitosamente.");
     }
-    
-    
+
+
     public boolean existeArista(String origen, String destino) {
         Ubicacion ubicacionOrigen = new Ubicacion(origen);
         Ubicacion ubicacionDestino = new Ubicacion(destino);
@@ -134,6 +129,7 @@ class GrafoNoDirigido {
 
         return false;
     }
+
     public void eliminarArista(String origen, String destino) {
         if (!existeArista(origen, destino)) {
             System.out.println("No existe una arista entre " + origen + " y " + destino + " para eliminar.");
@@ -148,7 +144,7 @@ class GrafoNoDirigido {
         System.out.println("Arista entre " + origen + " y " + destino + " eliminada exitosamente.");
     }
 
-    
+
     public void modificarPesoArista(String origen, String destino, int nuevoPeso) {
         if (!existeArista(origen, destino)) {
             System.out.println("No existe una arista entre " + origen + " y " + destino + ".");
@@ -167,7 +163,7 @@ class GrafoNoDirigido {
             }
         }
     }
-    
+
     public void agregarUbicacion(Ubicacion ubicacion) {
         listaAdyacencia.put(ubicacion, new ArrayList<>());
     }
@@ -179,7 +175,7 @@ class GrafoNoDirigido {
         }
 
         listaAdyacencia.get(origen).add(new Arista(destino, peso));
-        listaAdyacencia.get(destino).add(new Arista(origen, peso)); 
+        listaAdyacencia.get(destino).add(new Arista(origen, peso));
     }
 
     public boolean existeUbicacion(Ubicacion ubicacion) {
@@ -219,10 +215,102 @@ class GrafoNoDirigido {
         return distancias;
     }
 
+    public int[][] generarMatrizAdyacencia(Ubicacion puntoOrigen) {
+        List<Ubicacion> ubicaciones = new ArrayList<>(listaAdyacencia.keySet());
+        int n = ubicaciones.size();
+        int[][] matriz = new int[n][n];
+
+        // Mapear ubicaciones a índices
+        Map<Ubicacion, Integer> indiceMap = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            indiceMap.put(ubicaciones.get(i), i);
+        }
+
+        // Inicializar matriz con valores de infinito
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                matriz[i][j] = Integer.MAX_VALUE;
+            }
+        }
+
+        // Llenar la matriz con los pesos de las aristas
+        for (int i = 0; i < n; i++) {
+            Ubicacion origen = ubicaciones.get(i);
+            for (Arista arista : listaAdyacencia.get(origen)) {
+                Ubicacion destino = arista.getDestino();
+                int peso = arista.getPeso();
+                matriz[i][indiceMap.get(destino)] = peso;
+                matriz[indiceMap.get(destino)][i] = peso;
+            }
+        }
+
+        return matriz;
+    }
+
     public void imprimirUbicaciones() {
         System.out.println("Ubicaciones en el grafo:");
         for (Ubicacion ubicacion : listaAdyacencia.keySet()) {
             System.out.println(ubicacion.getNombre());
+        }
+    }
+}
+
+class AlgoritmosGrafo {
+    private static final int INF = Integer.MAX_VALUE;
+    public static Object prim;
+
+    public int prim(int[][] graph) {
+        int[] distance = new int[graph.length];
+        boolean[] visited = new boolean[graph.length];
+
+        for (int i = 0; i < graph.length; i++) {
+            distance[i] = INF;
+            visited[i] = false;
+        }
+
+        distance[0] = 0;
+
+        PriorityQueue<Node> pq = new PriorityQueue<>(
+                (a, b) -> Integer.compare(a.distance, b.distance)
+        );
+
+        pq.add(new Node(0, 0));
+
+        int mstWeight = 0;
+
+        while (!pq.isEmpty()) {
+            Node node = pq.poll();
+
+            if (visited[node.vertex]) {
+                continue;
+            }
+
+            visited[node.vertex] = true;
+
+            mstWeight += node.distance;
+
+            for (int neighbor = 0; neighbor < graph.length; neighbor++) {
+                if (graph[node.vertex][neighbor] > 0 && !visited[neighbor]) {
+                    int newDistance = graph[node.vertex][neighbor];
+
+                    if (newDistance < distance[neighbor]) {
+                        distance[neighbor] = newDistance;
+                        pq.add(new Node(neighbor, newDistance));
+                    }
+                }
+            }
+        }
+
+        return mstWeight;
+    }
+
+    private class Node {
+        int vertex;
+        int distance;
+
+        Node(int vertex, int distance) {
+            this.vertex = vertex;
+            this.distance = distance;
         }
     }
 }
