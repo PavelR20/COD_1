@@ -177,6 +177,8 @@ public class Main {
                         System.out.println("La ubicación de origen no existe en el grafo.");
                     }
                     break;
+                case 25:
+                    break;
                 case 10:
                     System.out.println("¡Hasta luego!");
                     System.exit(0);
