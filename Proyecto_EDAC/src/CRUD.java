@@ -72,11 +72,13 @@ class Arista {
     private Ubicacion origen; // Se agrega un campo para la ubicación de origen
     private Ubicacion destino;
     private int peso;
+    private int tiempo;
 
-    public Arista(Ubicacion origen, Ubicacion destino, int peso) {
+    public Arista(Ubicacion origen, Ubicacion destino, int peso,int tiempo) {
         this.origen = origen;
         this.destino = destino;
         this.peso = peso;
+        this.tiempo = tiempo;
     }
 
     public Ubicacion getOrigen() {
@@ -98,6 +100,11 @@ class Arista {
     public void setPeso(int nuevoPeso) {
         this.peso = nuevoPeso;
     }
+
+	public int getTiempo() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }
 
 
@@ -220,8 +227,8 @@ class GrafoNoDirigido {
             return;
         }
 
-        listaAdyacencia.get(origen).add(new Arista(origen, destino, peso)); // Usando getOrigen()
-        listaAdyacencia.get(destino).add(new Arista(destino, origen, peso)); // Usando getDestino()
+        listaAdyacencia.get(origen).add(new Arista(origen, destino, peso,0)); // Usando getOrigen()
+        listaAdyacencia.get(destino).add(new Arista(destino, origen, peso,0)); // Usando getDestino()
 
     }
 
@@ -238,7 +245,7 @@ class GrafoNoDirigido {
             distancias.put(ubicacion, Integer.MAX_VALUE);
         }
         distancias.put(origen, 0);
-        colaPrioridad.offer(new Arista(origen, origen, 0)); // Usando getOrigen() para origen y destino
+        colaPrioridad.offer(new Arista(origen, origen, 0,0)); // Usando getOrigen() para origen y destino
 
         while (!colaPrioridad.isEmpty()) {
             Arista aristaActual = colaPrioridad.poll();
@@ -254,7 +261,7 @@ class GrafoNoDirigido {
                 if (!visitados.contains(vecino) && distancias.get(actual) != Integer.MAX_VALUE
                         && distancias.get(actual) + peso < distancias.get(vecino)) {
                     distancias.put(vecino, distancias.get(actual) + peso);
-                    colaPrioridad.offer(new Arista(actual, vecino, distancias.get(vecino)));
+                    colaPrioridad.offer(new Arista(actual, vecino, distancias.get(vecino),0));
 
                 }
             }
@@ -328,6 +335,50 @@ class GrafoNoDirigido {
         for (Ubicacion ubicacion : listaAdyacencia.keySet()) {
             System.out.println(ubicacion.getNombre());
         }
+    }
+    
+    public Map<Ubicacion, Integer> planificarRuta(Ubicacion origen, Ubicacion destino, boolean minimizarTiempo) {
+        Map<Ubicacion, Integer> distancias = new HashMap<>();
+        PriorityQueue<Arista> colaPrioridad = new PriorityQueue<>((a, b) -> {
+            if (minimizarTiempo) {
+                return a.getTiempo() - b.getTiempo();
+            } else {
+                return a.getPeso() - b.getPeso();
+            }
+        });
+        Set<Ubicacion> visitados = new HashSet<>();
+
+        for (Ubicacion ubicacion : listaAdyacencia.keySet()) {
+            distancias.put(ubicacion, Integer.MAX_VALUE);
+        }
+        distancias.put(origen, 0);
+        colaPrioridad.offer(new Arista(origen, origen, 0, 0)); // Se usa 0 para la distancia y el tiempo inicialmente
+
+        while (!colaPrioridad.isEmpty()) {
+            Arista aristaActual = colaPrioridad.poll();
+            Ubicacion actual = aristaActual.getDestino();
+
+            if (visitados.contains(actual)) continue;
+            visitados.add(actual);
+
+            if (actual.equals(destino)) {
+                // Llegamos al destino, no es necesario seguir explorando
+                break;
+            }
+
+            for (Arista arista : listaAdyacencia.get(actual)) {
+                Ubicacion vecino = arista.getDestino();
+                int peso = minimizarTiempo ? arista.getTiempo() : arista.getPeso();
+
+                if (!visitados.contains(vecino) && distancias.get(actual) != Integer.MAX_VALUE
+                        && distancias.get(actual) + peso < distancias.get(vecino)) {
+                    distancias.put(vecino, distancias.get(actual) + peso);
+                    colaPrioridad.offer(new Arista(actual, vecino, peso, peso)); // Se usa el peso tanto para distancia como tiempo
+                }
+            }
+        }
+
+        return distancias;
     }
 }
 
@@ -413,5 +464,7 @@ class AlgoritmosGrafo {
         return dist;
     }
     
-    
+
 }
+    
+

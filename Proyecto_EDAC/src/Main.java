@@ -234,7 +234,47 @@ public class Main {
                         System.out.println("La ubicación de origen no existe en el grafo.");
                     }
                     break;
+                    
                 case 12:
+                    System.out.print("Ingrese el nombre de la ubicación de origen para planificar la ruta: ");
+                    String nombreOrigenRutaPlanificacion = scanner.nextLine().toLowerCase();
+                    Ubicacion ubicacionOrigenRuta = new Ubicacion(nombreOrigenRutaPlanificacion);
+
+                    System.out.print("Ingrese el nombre de la ubicación de destino para planificar la ruta: ");
+                    String nombreDestinoRuta = scanner.nextLine().toLowerCase();
+                    Ubicacion ubicacionDestinoRuta = new Ubicacion(nombreDestinoRuta);
+
+                    if (grafo.existeUbicacion(ubicacionOrigenRuta) && grafo.existeUbicacion(ubicacionDestinoRuta)) {
+                        System.out.println("Calculando ruta más corta desde " + nombreOrigenRutaPlanificacion + " a " + nombreDestinoRuta + "...");
+                        Map<Ubicacion, Integer> distanciasRuta = grafo.planificarRuta(ubicacionOrigenRuta, ubicacionDestinoRuta, false);
+                        for (Map.Entry<Ubicacion, Integer> entry : distanciasRuta.entrySet()) {
+                            System.out.println("Distancia a " + entry.getKey().getNombre() + ": " + entry.getValue());
+                        }
+                    } else {
+                        System.out.println("Una o ambas ubicaciones no existen en el grafo.");
+                    }
+                    break;
+
+                case 13:
+                    System.out.print("Ingrese el nombre de la ubicación de origen para planificar la ruta: ");
+                    String nombreOrigenTiempo = scanner.nextLine().toLowerCase();
+                    Ubicacion ubicacionOrigenTiempo = new Ubicacion(nombreOrigenTiempo);
+
+                    System.out.print("Ingrese el nombre de la ubicación de destino para planificar la ruta: ");
+                    String nombreDestinoTiempo = scanner.nextLine().toLowerCase();
+                    Ubicacion ubicacionDestinoTiempo = new Ubicacion(nombreDestinoTiempo);
+
+                    if (grafo.existeUbicacion(ubicacionOrigenTiempo) && grafo.existeUbicacion(ubicacionDestinoTiempo)) {
+                        System.out.println("Calculando ruta más corta minimizando el tiempo desde " + nombreOrigenTiempo + " a " + nombreDestinoTiempo + "...");
+                        Map<Ubicacion, Integer> distanciasTiempo = grafo.planificarRuta(ubicacionOrigenTiempo, ubicacionDestinoTiempo, true);
+                        for (Map.Entry<Ubicacion, Integer> entry : distanciasTiempo.entrySet()) {
+                            System.out.println("Tiempo a " + entry.getKey().getNombre() + ": " + entry.getValue());
+                        }
+                    } else {
+                        System.out.println("Una o ambas ubicaciones no existen en el grafo.");
+                    }
+                    break;
+                case 14:
                     System.out.println("¡Hasta luego!");
                     System.exit(0);
                 default:
