@@ -231,7 +231,7 @@ public class Main {
                         int[][] matrizAdyacencia = grafo.generarMatrizAdyacencia(ubicacionOrigenFloyd); // Generar matriz de adyacencia
                         AlgoritmosGrafo1 algoritmosGrafo = new AlgoritmosGrafo1();
                         int[][] distancias = GrafoNoDirigido1.floydWarshall(matrizAdyacencia); // Pasar la matriz de adyacencia a floydWarshall
-                        // Aquí puedes imprimir la matriz de distancias o hacer cualquier otra cosa con ella
+                        //// Aquí puedes imprimir la matriz de distancias o hacer cualquier otra cosa con ella
                     } else {
                         System.out.println("La ubicación de origen no existe en el grafo.");
                     }
