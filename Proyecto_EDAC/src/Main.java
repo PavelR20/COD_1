@@ -4,7 +4,7 @@ import java.io.*;
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        GrafoNoDirigido grafo = new GrafoNoDirigido();
+        GrafoNoDirigido1 grafo = new GrafoNoDirigido1();
         Set<String> nombresUbicaciones = new HashSet<>();
 
         while (true) {
@@ -33,10 +33,10 @@ public class Main {
             System.out.println("9.  Calcular árbol de expansión mínima desde un punto de origen (Prim) ");
             System.out.println("10. Calcular árbol de expansión mínima desde un punto de origen (Kruskal)");
             System.out.println("11. Algoritmo Floyd-Warshall                   ");
-            System.out.println("12.  Minimizar Distancia                  ");
+            System.out.println("12. Minimizar Distancia                  ");
             System.out.println("13. Minimizar Tiempo                   ");
             System.out.println("\n");
-            System.out.println("12. Salir                     ");
+            System.out.println("14. Salir                     ");
 
 
             System.out.print("\n Ingrese el número de la acción:");
@@ -54,7 +54,7 @@ public class Main {
 
                     System.out.print("Ingrese el nombre de la ubicación: ");
                     String nombreUbicacion = scanner.nextLine().toLowerCase();
-                    grafo.agregarUbicacion(new Ubicacion(nombreUbicacion));
+                    grafo.agregarUbicacion(new Ubicacion1(nombreUbicacion));
                     boolean agregarMasUbicaciones = true;
                     while (agregarMasUbicaciones) {
                         System.out.print("Ingrese el nombre de la ubicación: ");
@@ -63,7 +63,7 @@ public class Main {
                             System.out.println("La ubicación ya ha sido agregada anteriormente.");
                         } else {
                             nombresUbicaciones.add(nombreUbicacion);
-                            grafo.agregarUbicacion(new Ubicacion(nombreUbicacion));
+                            grafo.agregarUbicacion(new Ubicacion1(nombreUbicacion));
                         }
 
                         System.out.print("¿Desea agregar otra ubicación? (s/n): ");
@@ -105,7 +105,7 @@ public class Main {
                         if (grafo.existeArista(nombreOrigen, nombreDestino)) {
                             System.out.println("Ya se ha agregado un peso para la arista entre " + nombreOrigen + " y " + nombreDestino + ".");
                         } else {
-                            grafo.agregarArista(new Ubicacion(nombreOrigen), new Ubicacion(nombreDestino), peso);
+                            grafo.agregarArista(new Ubicacion1(nombreOrigen), new Ubicacion1(nombreDestino), peso);
                             System.out.println("Arista agregada correctamente.");
                         }
 
@@ -120,11 +120,11 @@ public class Main {
                 case 3:
                     System.out.print("Ingrese el nombre de la ubicación de origen: ");
                     String nombreOrigenRuta = scanner.nextLine().toLowerCase();
-                    Ubicacion ubicacionOrigen = new Ubicacion(nombreOrigenRuta);
+                    Ubicacion1 ubicacionOrigen = new Ubicacion1(nombreOrigenRuta);
                     if (grafo.existeUbicacion(ubicacionOrigen)) {
                         System.out.println("Calculando ruta más corta desde " + nombreOrigenRuta + "...");
-                        Map<Ubicacion, Integer> distancias = grafo.rutaMasCorta(ubicacionOrigen);
-                        for (Map.Entry<Ubicacion, Integer> entry : distancias.entrySet()) {
+                        Map<Ubicacion1, Integer> distancias = grafo.rutaMasCorta(ubicacionOrigen);
+                        for (Map.Entry<Ubicacion1, Integer> entry : distancias.entrySet()) {
                             System.out.println("Distancia a " + entry.getKey().getNombre() + ": " + entry.getValue());
                         }
                     } else {
@@ -138,7 +138,7 @@ public class Main {
                 case 5:
                     System.out.print("Ingrese el nombre de la ubicación que desea modificar: ");
                     String nombreUbicacionModificar = scanner.nextLine().toLowerCase();
-                    if (grafo.existeUbicacion(new Ubicacion(nombreUbicacionModificar))) {
+                    if (grafo.existeUbicacion(new Ubicacion1(nombreUbicacionModificar))) {
                         System.out.print("Ingrese el nuevo nombre para la ubicación: ");
                         String nuevoNombreUbicacion = scanner.nextLine().toLowerCase();
                         grafo.modificarUbicacion(nombreUbicacionModificar, nuevoNombreUbicacion);
@@ -154,7 +154,7 @@ public class Main {
                     }
                     System.out.print("Ingrese el nombre de la ubicación que desea eliminar: ");
                     String nombreUbicacionEliminar = scanner.nextLine().toLowerCase();
-                    if (grafo.existeUbicacion(new Ubicacion(nombreUbicacionEliminar))) {
+                    if (grafo.existeUbicacion(new Ubicacion1(nombreUbicacionEliminar))) {
                         System.out.print("¿Está seguro de eliminar la ubicación " + nombreUbicacionEliminar + "? (s/n): ");
                         String confirmacion = scanner.nextLine().toLowerCase();
                         if (confirmacion.equals("s")) {
@@ -196,9 +196,9 @@ public class Main {
                 case 9:
                     System.out.print("Ingrese el nombre de la ubicación de origen para el Árbol de Expansión Mínima (Prim): ");
                     String nombreOrigenPrim = scanner.nextLine().toLowerCase();
-                    Ubicacion ubicacionOrigenPrim = new Ubicacion(nombreOrigenPrim);
+                    Ubicacion1 ubicacionOrigenPrim = new Ubicacion1(nombreOrigenPrim);
                     if (grafo.existeUbicacion(ubicacionOrigenPrim)) {
-                        AlgoritmosGrafo algoritmos = new AlgoritmosGrafo();
+                    	AlgoritmosGrafo1 algoritmos = new AlgoritmosGrafo1();
                         int mstWeight = algoritmos.prim(grafo.generarMatrizAdyacencia(ubicacionOrigenPrim));
                         System.out.println("Peso del árbol de expansión mínima desde " + nombreOrigenPrim + ": " + mstWeight);
                     } else {
@@ -208,11 +208,11 @@ public class Main {
                 case 10:
                     System.out.print("Ingrese el nombre de la ubicación de origen para el Árbol de Expansión Mínima (Kruskal): ");
                     String nombreOrigenKruskal = scanner.nextLine().toLowerCase();
-                    Ubicacion ubicacionOrigenKruskal = new Ubicacion(nombreOrigenKruskal);
+                    Ubicacion1 ubicacionOrigenKruskal = new Ubicacion1(nombreOrigenKruskal);
                     if (grafo.existeUbicacion(ubicacionOrigenKruskal)) {
-                        List<Arista> arbolExpansionMinima = grafo.kruskal();
+                        List<Arista1> arbolExpansionMinima = grafo.kruskal();
                         int totalWeight = 0;
-                        for (Arista arista : arbolExpansionMinima) {
+                        for (Arista1 arista : arbolExpansionMinima) {
                             System.out.println(arista.getDestino().getNombre() + " - " + arista.getDestino().getNombre() + ": " + arista.getPeso());
                             totalWeight += arista.getPeso();
                         }
@@ -225,12 +225,12 @@ public class Main {
                 case 11:
                     System.out.print("Ingrese el nombre de la ubicación de origen para el algoritmo de Floyd-Warshall: ");
                     String nombreOrigenFloyd = scanner.nextLine().toLowerCase();
-                    Ubicacion ubicacionOrigenFloyd = new Ubicacion(nombreOrigenFloyd);
+                    Ubicacion1 ubicacionOrigenFloyd = new Ubicacion1(nombreOrigenFloyd);
                     if (grafo.existeUbicacion(ubicacionOrigenFloyd)) {
                         System.out.println("Ejecutando el algoritmo de Floyd-Warshall...");
                         int[][] matrizAdyacencia = grafo.generarMatrizAdyacencia(ubicacionOrigenFloyd); // Generar matriz de adyacencia
-                        AlgoritmosGrafo algoritmosGrafo = new AlgoritmosGrafo();
-                        int[][] distancias = algoritmosGrafo.floydWarshall(matrizAdyacencia); // Pasar la matriz de adyacencia a floydWarshall
+                        AlgoritmosGrafo1 algoritmosGrafo = new AlgoritmosGrafo1();
+                        int[][] distancias = GrafoNoDirigido1.floydWarshall(matrizAdyacencia); // Pasar la matriz de adyacencia a floydWarshall
                         // Aquí puedes imprimir la matriz de distancias o hacer cualquier otra cosa con ella
                     } else {
                         System.out.println("La ubicación de origen no existe en el grafo.");
@@ -240,16 +240,16 @@ public class Main {
                 case 12:
                     System.out.print("Ingrese el nombre de la ubicación de origen para planificar la ruta: ");
                     String nombreOrigenRutaPlanificacion = scanner.nextLine().toLowerCase();
-                    Ubicacion ubicacionOrigenRuta = new Ubicacion(nombreOrigenRutaPlanificacion);
+                    Ubicacion1 ubicacionOrigenRuta = new Ubicacion1(nombreOrigenRutaPlanificacion);
 
                     System.out.print("Ingrese el nombre de la ubicación de destino para planificar la ruta: ");
                     String nombreDestinoRuta = scanner.nextLine().toLowerCase();
-                    Ubicacion ubicacionDestinoRuta = new Ubicacion(nombreDestinoRuta);
+                    Ubicacion1 ubicacionDestinoRuta = new Ubicacion1(nombreDestinoRuta);
 
                     if (grafo.existeUbicacion(ubicacionOrigenRuta) && grafo.existeUbicacion(ubicacionDestinoRuta)) {
                         System.out.println("Calculando ruta más corta desde " + nombreOrigenRutaPlanificacion + " a " + nombreDestinoRuta + "...");
-                        Map<Ubicacion, Integer> distanciasRuta = grafo.planificarRuta(ubicacionOrigenRuta, ubicacionDestinoRuta, false);
-                        for (Map.Entry<Ubicacion, Integer> entry : distanciasRuta.entrySet()) {
+                        Map<Ubicacion1, Integer> distanciasRuta = grafo.planificarRuta(ubicacionOrigenRuta, ubicacionDestinoRuta, false);
+                        for (Map.Entry<Ubicacion1, Integer> entry : distanciasRuta.entrySet()) {
                             System.out.println("Distancia a " + entry.getKey().getNombre() + ": " + entry.getValue());
                         }
                     } else {
@@ -260,16 +260,16 @@ public class Main {
                 case 13:
                     System.out.print("Ingrese el nombre de la ubicación de origen para planificar la ruta: ");
                     String nombreOrigenTiempo = scanner.nextLine().toLowerCase();
-                    Ubicacion ubicacionOrigenTiempo = new Ubicacion(nombreOrigenTiempo);
+                    Ubicacion1 ubicacionOrigenTiempo = new Ubicacion1(nombreOrigenTiempo);
 
                     System.out.print("Ingrese el nombre de la ubicación de destino para planificar la ruta: ");
                     String nombreDestinoTiempo = scanner.nextLine().toLowerCase();
-                    Ubicacion ubicacionDestinoTiempo = new Ubicacion(nombreDestinoTiempo);
+                    Ubicacion1 ubicacionDestinoTiempo = new Ubicacion1(nombreDestinoTiempo);
 
                     if (grafo.existeUbicacion(ubicacionOrigenTiempo) && grafo.existeUbicacion(ubicacionDestinoTiempo)) {
                         System.out.println("Calculando ruta más corta minimizando el tiempo desde " + nombreOrigenTiempo + " a " + nombreDestinoTiempo + "...");
-                        Map<Ubicacion, Integer> distanciasTiempo = grafo.planificarRuta(ubicacionOrigenTiempo, ubicacionDestinoTiempo, true);
-                        for (Map.Entry<Ubicacion, Integer> entry : distanciasTiempo.entrySet()) {
+                        Map<Ubicacion1, Integer> distanciasTiempo = grafo.planificarRuta(ubicacionOrigenTiempo, ubicacionDestinoTiempo, true);
+                        for (Map.Entry<Ubicacion1, Integer> entry : distanciasTiempo.entrySet()) {
                             System.out.println("Tiempo a " + entry.getKey().getNombre() + ": " + entry.getValue());
                         }
                     } else {

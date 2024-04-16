@@ -9,21 +9,21 @@ class DisjointSet {
         rank = new HashMap<>();
     }
 
-    public void makeSet(Ubicacion ubicacion) {
+    public void makeSet(Ubicacion1 ubicacion) {
         parent.put(ubicacion, ubicacion);
         rank.put(ubicacion, 0);
     }
 
-    public Ubicacion find(Ubicacion ubicacion) {
+    public Ubicacion find(Ubicacion1 ubicacion) {
         if (parent.get(ubicacion) != ubicacion) {
-            parent.put(ubicacion, find(parent.get(ubicacion)));
+            parent.put(ubicacion, find((Ubicacion1) parent.get(ubicacion)));
         }
         return parent.get(ubicacion);
     }
 
     public void union(Ubicacion ubicacion1, Ubicacion ubicacion2) {
-        Ubicacion root1 = find(ubicacion1);
-        Ubicacion root2 = find(ubicacion2);
+        Ubicacion root1 = find((Ubicacion1) ubicacion1);
+        Ubicacion root2 = find((Ubicacion1) ubicacion2);
 
         if (root1 == root2) return;
 
@@ -39,9 +39,9 @@ class DisjointSet {
 }
 
 class Ubicacion {
-    private final String nombre;
+    private String nombre = "";
 
-    public Ubicacion(String nombre) {
+    public Ubicacion() {
         this.nombre = nombre;
     }
 
@@ -121,8 +121,8 @@ class GrafoNoDirigido {
 
     
     public void modificarUbicacion(String nombreViejo, String nuevoNombre) {
-        Ubicacion ubicacionVieja = new Ubicacion(nombreViejo);
-        Ubicacion ubicacionNueva = new Ubicacion(nuevoNombre);
+        Ubicacion ubicacionVieja = new Ubicacion();
+        Ubicacion ubicacionNueva = new Ubicacion();
 
         if (!existeUbicacion(ubicacionVieja)) {
             System.out.println("La ubicación a modificar no existe en el grafo.");
@@ -149,7 +149,7 @@ class GrafoNoDirigido {
 
 
     public void eliminarUbicacion(String nombreUbicacion) {
-        Ubicacion ubicacionEliminar = new Ubicacion(nombreUbicacion);
+        Ubicacion ubicacionEliminar = new Ubicacion();
 
         if (!existeUbicacion(ubicacionEliminar)) {
             System.out.println("La ubicación a eliminar no existe en el grafo.");
@@ -166,8 +166,8 @@ class GrafoNoDirigido {
 
 
     public boolean existeArista(String origen, String destino) {
-        Ubicacion ubicacionOrigen = new Ubicacion(origen);
-        Ubicacion ubicacionDestino = new Ubicacion(destino);
+        Ubicacion ubicacionOrigen = new Ubicacion();
+        Ubicacion ubicacionDestino = new Ubicacion();
 
         if (!existeUbicacion(ubicacionOrigen) || !existeUbicacion(ubicacionDestino)) {
             return false;
@@ -189,8 +189,8 @@ class GrafoNoDirigido {
             return;
         }
 
-        Ubicacion ubicacionOrigen = new Ubicacion(origen);
-        Ubicacion ubicacionDestino = new Ubicacion(destino);
+        Ubicacion ubicacionOrigen = new Ubicacion();
+        Ubicacion ubicacionDestino = new Ubicacion();
 
         List<Arista> aristasOrigen = listaAdyacencia.get(ubicacionOrigen);
         aristasOrigen.removeIf(arista -> arista.getDestino().equals(ubicacionDestino));
@@ -204,8 +204,8 @@ class GrafoNoDirigido {
             return;
         }
 
-        Ubicacion ubicacionOrigen = new Ubicacion(origen);
-        Ubicacion ubicacionDestino = new Ubicacion(destino);
+        Ubicacion ubicacionOrigen = new Ubicacion();
+        Ubicacion ubicacionDestino = new Ubicacion();
 
         List<Arista> aristasOrigen = listaAdyacencia.get(ubicacionOrigen);
         for (Arista arista : aristasOrigen) {
@@ -279,7 +279,7 @@ class GrafoNoDirigido {
             for (Arista arista : listaAdyacencia.get(origen)) {
                 colaAristas.offer(arista);
             }
-            disjointSet.makeSet(origen);
+            disjointSet.makeSet((Ubicacion1) origen);
         }
 
         while (!colaAristas.isEmpty() && arbolExpansionMinima.size() < listaAdyacencia.size() - 1) {
@@ -287,7 +287,7 @@ class GrafoNoDirigido {
             Ubicacion origen = arista.getOrigen(); // Se obtiene la ubicación de origen de la arista
             Ubicacion destino = arista.getDestino(); // Se obtiene la ubicación de destino de la arista
 
-            if (disjointSet.find(origen) != disjointSet.find(destino)) {
+            if (disjointSet.find((Ubicacion1) origen) != disjointSet.find((Ubicacion1) destino)) {
                 arbolExpansionMinima.add(arista);
                 disjointSet.union(origen, destino);
             }
