@@ -50,10 +50,20 @@ public class Main {
 
             switch (opcion) {
                 case 1:
+                	boolean agregarUbicaciones = true;
+                	while (agregarUbicaciones) {
+                	
                     System.out.print("Ingrese el nombre de la ubicación: ");
                     String nombreUbicacion = scanner.nextLine().toLowerCase();
                     grafo.agregarUbicacion(new Ubicacion(nombreUbicacion));
                     nombresUbicaciones.add(nombreUbicacion);
+                    
+                    System.out.print("¿Desea agregar otra ubicacion? (s/n): ");
+                    String respuesta = scanner.nextLine().toLowerCase();
+                    if (!respuesta.equals("s")) {
+                    	agregarUbicaciones = false;
+                    }
+                	}
                     break;
 
                 case 2:
@@ -224,11 +234,24 @@ public class Main {
                         int[][] matrizAdyacencia = grafo.generarMatrizAdyacencia(ubicacionOrigenFloyd); // Generar matriz de adyacencia
                         AlgoritmosGrafo algoritmosGrafo = new AlgoritmosGrafo();
                         int[][] distancias = algoritmosGrafo.floydWarshall(matrizAdyacencia); // Pasar la matriz de adyacencia a floydWarshall
-                        // Aquí puedes imprimir la matriz de distancias o hacer cualquier otra cosa con ella
+
+                        // Imprimir la matriz de distancias mínimas
+                        System.out.println("Matriz de distancias mínimas:");
+                        for (int i = 0; i < distancias.length; i++) {
+                            for (int j = 0; j < distancias[i].length; j++) {
+                                if (distancias[i][j] == AlgoritmosGrafo.INF) {
+                                    System.out.print("INF ");
+                                } else {
+                                    System.out.print(distancias[i][j] + " ");
+                                }
+                            }
+                            System.out.println();
+                        }
                     } else {
                         System.out.println("La ubicación de origen no existe en el grafo.");
                     }
                     break;
+
 
                 case 12:
                     System.out.print("Ingrese el nombre de la ubicación de origen para planificar la ruta: ");
