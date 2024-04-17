@@ -31,13 +31,15 @@ public class Main {
             System.out.println("6. Eliminar ubicación");
             System.out.println("7. Modificar Peso");
             System.out.println("8. Eliminar Peso");
-            System.out.println("9. Calcular árbol de expansión mínima desde un punto de origen (Prim)");
-            System.out.println("10. Calcular árbol de expansión mínima desde un punto de origen (Kruskal)");
-            System.out.println("11. Algoritmo Floyd-Warshall");
-            System.out.println("12. Minimizar Distancia");
-            System.out.println("13. Minimizar Tiempo");
+            System.out.println("9. Modificar Tiempo");
+            System.out.println("10. Eliminar Tiempo");
+            System.out.println("11. Calcular árbol de expansión mínima desde un punto de origen (Prim)");
+            System.out.println("12. Calcular árbol de expansión mínima desde un punto de origen (Kruskal)");
+            System.out.println("13. Algoritmo Floyd-Warshall");
+            System.out.println("14. Minimizar Distancia");
+            System.out.println("15. Minimizar Tiempo");
             System.out.println("\n");
-            System.out.println("14. Salir");
+            System.out.println("16. Salir");
 
             System.out.print("\nIngrese el número de la acción: ");
             int opcion;
@@ -182,7 +184,7 @@ public class Main {
                     int nuevoPeso = Integer.parseInt(scanner.nextLine());
                     grafo.modificarPesoArista(nombreOrigenModificarPeso, nombreDestinoModificarPeso, nuevoPeso);
                     break;
-
+                    
                 case 8:
                     if (nombresUbicaciones.isEmpty()) {
                         System.out.println("No hay pesos agregadas para Eliminar.");
@@ -194,8 +196,35 @@ public class Main {
                     String nombreDestinoEliminarArista = scanner.nextLine().toLowerCase();
                     grafo.eliminarArista(nombreOrigenEliminarArista, nombreDestinoEliminarArista);
                     break;
-
+                    
                 case 9:
+                    if (nombresUbicaciones.isEmpty()) {
+                        System.out.println("No hay tiempos agregados para Modificarr.");
+                        break;
+                    }
+                    System.out.print("Ingrese el nombre del origen: ");
+                    String nombreOrigenModificarTiempo = scanner.nextLine().toLowerCase();
+                    System.out.print("Ingrese el nombre del destino: ");
+                    String nombreDestinoModificarTiempo = scanner.nextLine().toLowerCase();
+                    System.out.print("Ingrese el nuevo tiempo para la arista: ");
+                    int nuevoTiempo = Integer.parseInt(scanner.nextLine());
+                    grafo.modificarPesoArista(nombreOrigenModificarTiempo, nombreDestinoModificarTiempo, nuevoTiempo);
+                    break;
+                    
+                case 10:
+                    if (nombresUbicaciones.isEmpty()) {
+                        System.out.println("No hay tiempos agregadas para Eliminar.");
+                        break;
+                    }
+                    System.out.print("Ingrese el nombre del origen: ");
+                    String nombreOrigenEliminarTiempo = scanner.nextLine().toLowerCase();
+                    System.out.print("Ingrese el nombre del destino: ");
+                    String nombreDestinoEliminarTiempo = scanner.nextLine().toLowerCase();
+                    grafo.eliminarArista(nombreOrigenEliminarTiempo, nombreDestinoEliminarTiempo);
+                    break;
+              
+
+                case 11:
                     System.out.print("Ingrese el nombre de la ubicación de origen para el Árbol de Expansión Mínima (Prim): ");
                     String nombreOrigenPrim = scanner.nextLine().toLowerCase();
                     Ubicacion ubicacionOrigenPrim = new Ubicacion(nombreOrigenPrim);
@@ -208,7 +237,7 @@ public class Main {
                     }
                     break;
 
-                case 10:
+                case 12:
                     System.out.print("Ingrese el nombre de la ubicación de origen para el Árbol de Expansión Mínima (Kruskal): ");
                     String nombreOrigenKruskal = scanner.nextLine().toLowerCase();
                     Ubicacion ubicacionOrigenKruskal = new Ubicacion(nombreOrigenKruskal);
@@ -225,7 +254,7 @@ public class Main {
                     }
                     break;
 
-                case 11:
+                case 13:
                     System.out.print("Ingrese el nombre de la ubicación de origen para el algoritmo de Floyd-Warshall: ");
                     String nombreOrigenFloyd = scanner.nextLine().toLowerCase();
                     Ubicacion ubicacionOrigenFloyd = new Ubicacion(nombreOrigenFloyd);
@@ -253,7 +282,7 @@ public class Main {
                     break;
 
 
-                case 12:
+                case 14:
                     System.out.print("Ingrese el nombre de la ubicación de origen para planificar la ruta: ");
                     String nombreOrigenRutaPlanificacion = scanner.nextLine().toLowerCase();
                     Ubicacion ubicacionOrigenRuta = new Ubicacion(nombreOrigenRutaPlanificacion);
@@ -273,7 +302,7 @@ public class Main {
                     }
                     break;
 
-                case 13:
+                case 15:
                     System.out.print("Ingrese el nombre de la ubicación de origen para planificar la ruta: ");
                     String nombreOrigenTiempo = scanner.nextLine().toLowerCase();
                     Ubicacion ubicacionOrigenTiempo = new Ubicacion(nombreOrigenTiempo);
@@ -293,43 +322,11 @@ public class Main {
                     }
                     break;
 
-                case 14:
+                case 16:
                     System.out.println("¡Hasta luego!");
                     System.exit(0);
 
-                case 15:
-                    System.out.print("Introduce el origen: ");
-                    String origen = scanner.nextLine().toLowerCase();
-                    System.out.print("Introduce el destino: ");
-                    String destino = scanner.nextLine().toLowerCase();
-
-                    if (!grafo.existeUbicacion(new Ubicacion(origen)) || !grafo.existeUbicacion(new Ubicacion(destino))) {
-                        System.out.println("Una o ambas ubicaciones no existen en el grafo.");
-                        break;
-                    }
-
-                    System.out.print("Introduce el tiempo que toma de " + origen + " a " + destino + ": ");
-                    int tiempo;
-                    try {
-                        tiempo = Integer.parseInt(scanner.nextLine());
-                    } catch (NumberFormatException e) {
-                        System.out.println("Ingrese un número válido para el tiempo.");
-                        break;
-                    }
-
-                    if (tiempo == -1) {
-                        System.out.println("El tiempo no puede ser -1.");
-                        break;
-                    }
-
-                    grafo.agregarTiempo(origen, destino, tiempo);
-
-                    System.out.print("¿Desea introducir otro tiempo? (s/n): ");
-                    String respuesta = scanner.nextLine().toLowerCase();
-                    if (!respuesta.equals("s")) {
-                        agregarMasTiempos = false;
-                    }
-                    break;
+                
 
                 default:
                     System.out.println("Opción inválida! Por favor, ingrese un número del 1 al 5.");
