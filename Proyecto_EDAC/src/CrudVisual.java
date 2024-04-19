@@ -1,6 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
@@ -11,8 +10,8 @@ public class CrudVisual extends JFrame {
 
     public CrudVisual() {
         setTitle("CRUD Visual");
-        setSize(400, 300);
-        setLocationRelativeTo(null);
+        setTitle("Menu");
+        setSize(800, 600); // Tamaño inicial de la ventana
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         grafo = new GrafoNoDirigido();
@@ -22,6 +21,8 @@ public class CrudVisual extends JFrame {
         panel.setLayout(new GridLayout(5, 1));
 
         JButton btnAgregarUbicacion = new JButton("Agregar Ubicación");
+        customizeButton(btnAgregarUbicacion);
+
         btnAgregarUbicacion.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String nombre = JOptionPane.showInputDialog("Ingrese el nombre de la ubicación:");
@@ -34,8 +35,10 @@ public class CrudVisual extends JFrame {
                 }
             }
         });
+        panel.add(btnAgregarUbicacion);
 
         JButton btnAgregarArista = new JButton("Agregar Arista con Peso y Tiempo");
+        customizeButton(btnAgregarArista);
         btnAgregarArista.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (nombresUbicaciones.isEmpty()) {
@@ -72,15 +75,21 @@ public class CrudVisual extends JFrame {
                 JOptionPane.showMessageDialog(null, "Arista agregada correctamente.");
             }
         });
+        panel.add(btnAgregarArista);
+        
+        
 
         JButton btnImprimirUbicaciones = new JButton("Imprimir Ubicaciones");
+        customizeButton(btnImprimirUbicaciones);
         btnImprimirUbicaciones.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 grafo.imprimirUbicaciones();
             }
         });
+        panel.add(btnImprimirUbicaciones);
 
         JButton btnModificarUbicacion = new JButton("Modificar Ubicación");
+        customizeButton(btnModificarUbicacion);
         btnModificarUbicacion.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String nombreViejo = JOptionPane.showInputDialog("Ingrese el nombre de la ubicación a modificar:");
@@ -99,8 +108,10 @@ public class CrudVisual extends JFrame {
                 }
             }
         });
+        panel.add(btnModificarUbicacion);
 
         JButton btnEliminarUbicacion = new JButton("Eliminar Ubicación");
+        customizeButton(btnEliminarUbicacion);
         btnEliminarUbicacion.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String nombre = JOptionPane.showInputDialog("Ingrese el nombre de la ubicación a eliminar:");
@@ -113,8 +124,10 @@ public class CrudVisual extends JFrame {
                 }
             }
         });
-        
+        panel.add(btnEliminarUbicacion);
+
         JButton btnPrim = new JButton("Calcular Árbol de Expansión Mínima (Prim)");
+        customizeButton(btnPrim);
         btnPrim.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 ejecutarPrim();
@@ -123,6 +136,7 @@ public class CrudVisual extends JFrame {
         panel.add(btnPrim);
 
         JButton btnKruskal = new JButton("Calcular Árbol de Expansión Mínima (Kruskal)");
+        customizeButton(btnKruskal);
         btnKruskal.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 ejecutarKruskal();
@@ -131,6 +145,7 @@ public class CrudVisual extends JFrame {
         panel.add(btnKruskal);
 
         JButton btnRutaMasCorta = new JButton("Calcular Ruta Más Corta");
+        customizeButton(btnRutaMasCorta);
         btnRutaMasCorta.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 ejecutarRutaMasCorta();
@@ -138,29 +153,32 @@ public class CrudVisual extends JFrame {
         });
         panel.add(btnRutaMasCorta);
 
-        panel.add(btnAgregarUbicacion);
-        panel.add(btnAgregarArista);
-        panel.add(btnImprimirUbicaciones);
-        panel.add(btnModificarUbicacion);
-        panel.add(btnEliminarUbicacion);
-
         add(panel);
         setVisible(true);
     }
-
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
                     CrudVisual frame = new CrudVisual();
+                    frame.setResizable(true); // Permite que la ventana sea redimensionable
+                    frame.setVisible(true);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         });
     }
-    
- // Método para ejecutar el algoritmo de Prim y mostrar el peso del árbol de expansión mínima
+
+    // Método para personalizar los botones
+    private void customizeButton(JButton button) {
+        button.setBackground(new Color(240, 240, 240)); // Color de fondo
+        button.setForeground(Color.BLACK); // Color del texto
+        button.setFocusPainted(false); // Elimina el efecto de enfoque
+        button.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1)); // Borde del botón
+    }
+
+    // Método para ejecutar el algoritmo de Prim y mostrar el peso del árbol de expansión mínima
     private void ejecutarPrim() {
         String nombreOrigenPrim = JOptionPane.showInputDialog("Ingrese el nombre de la ubicación de origen para el Árbol de Expansión Mínima (Prim):");
         Ubicacion ubicacionOrigenPrim = new Ubicacion(nombreOrigenPrim);
@@ -206,4 +224,6 @@ public class CrudVisual extends JFrame {
             JOptionPane.showMessageDialog(null, "La ubicación de origen no existe en el grafo.");
         }
     }
+    
+    
 }
