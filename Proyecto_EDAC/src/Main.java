@@ -199,7 +199,7 @@ public class Main {
                     
                 case 9:
                     if (nombresUbicaciones.isEmpty()) {
-                        System.out.println("No hay tiempos agregados para Modificarr.");
+                        System.out.println("No hay tiempos agregados para Modificar.");
                         break;
                     }
                     System.out.print("Ingrese el nombre del origen: ");
@@ -208,7 +208,7 @@ public class Main {
                     String nombreDestinoModificarTiempo = scanner.nextLine().toLowerCase();
                     System.out.print("Ingrese el nuevo tiempo para la arista: ");
                     int nuevoTiempo = Integer.parseInt(scanner.nextLine());
-                    grafo.modificarPesoArista(nombreOrigenModificarTiempo, nombreDestinoModificarTiempo, nuevoTiempo);
+                    grafo.modificarTiempoArista(nombreOrigenModificarTiempo, nombreDestinoModificarTiempo, nuevoTiempo);
                     break;
                     
                 case 10:
