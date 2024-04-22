@@ -3,15 +3,20 @@ import java.io.*;
 
 public class Main {
     public static void main(String[] args) {
+        // Crear un Scanner para leer la entrada del usuario
         Scanner scanner = new Scanner(System.in);
+        // Crear una instancia de GrafoNoDirigido para representar el grafo
         GrafoNoDirigido grafo = new GrafoNoDirigido();
+        // Un conjunto para almacenar los nombres de las ubicaciones
         Set<String> nombresUbicaciones = new HashSet<>();
         boolean agregarMasTiempos = true;
 
+        // Bucle principal que muestra el menú y maneja las acciones del usuario
         while (true) {
             // Limpiar la consola dependiendo del sistema operativo
             try {
                 if (System.getProperty("os.name").contains("Windows")) {
+                    // Limpiar la consola en Windows
                     new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
                 } else {
                     System.out.print("\033[H\033[2J");
@@ -20,6 +25,8 @@ public class Main {
             } catch (IOException | InterruptedException ex) {
                 ex.printStackTrace();
             }
+
+            // Mostrar el menú principal
 
             System.out.println("\n\n------Menu Principal-----\n");
             System.out.println("¿Qué acción desea realizar?");
@@ -41,6 +48,7 @@ public class Main {
             System.out.println("\n");
             System.out.println("16. Salir");
 
+            // Solicitar la selección del usuario
             System.out.print("\nIngrese el número de la acción: ");
             int opcion;
             try {
@@ -50,8 +58,10 @@ public class Main {
                 continue;
             }
 
+            // Realizar la acción correspondiente según la opción seleccionada por el usuario
             switch (opcion) {
                 case 1:
+                    // Agregar una ubicación al grafo
                 	boolean agregarUbicaciones = true;
                 	while (agregarUbicaciones) {
                 	
@@ -59,7 +69,8 @@ public class Main {
                     String nombreUbicacion = scanner.nextLine().toLowerCase();
                     grafo.agregarUbicacion(new Ubicacion(nombreUbicacion));
                     nombresUbicaciones.add(nombreUbicacion);
-                    
+
+                    // Preguntar al usuario si desea agregar otra ubicación
                     System.out.print("¿Desea agregar otra ubicacion? (s/n): ");
                     String respuesta = scanner.nextLine().toLowerCase();
                     if (!respuesta.equals("s")) {
@@ -69,6 +80,7 @@ public class Main {
                     break;
 
                 case 2:
+                    // Agregar una arista con peso y tiempo al grafo
                     if (nombresUbicaciones.isEmpty()) {
                         System.out.println("No hay ubicaciones agregadas para asignarle un peso.");
                         break;
@@ -111,6 +123,7 @@ public class Main {
                             grafo.agregarArista(new Ubicacion(nombreOrigen), new Ubicacion(nombreDestino), peso, tiempo);
                             System.out.println("Arista agregada correctamente.");
                         }
+                        // Preguntar al usuario si desea agregar otro peso
                         System.out.print("¿Desea agregar otro peso? (s/n): ");
                         String respuesta = scanner.nextLine().toLowerCase();
                         if (!respuesta.equals("s")) {
@@ -120,6 +133,7 @@ public class Main {
                     break;
 
                 case 3:
+                    // Calcular la ruta más corta desde una ubicación dada
                     System.out.print("Ingrese el nombre de la ubicación de origen: ");
                     String nombreOrigenRuta = scanner.nextLine().toLowerCase();
                     Ubicacion ubicacionOrigen = new Ubicacion(nombreOrigenRuta);
@@ -135,10 +149,12 @@ public class Main {
                     break;
 
                 case 4:
+                    // Mostrar todas las ubicaciones del grafo
                     grafo.imprimirUbicaciones();
                     break;
 
                 case 5:
+                    // Modificar el nombre de una ubicación existente en el grafo
                     System.out.print("Ingrese el nombre de la ubicación que desea modificar: ");
                     String nombreUbicacionModificar = scanner.nextLine().toLowerCase();
                     if (grafo.existeUbicacion(new Ubicacion(nombreUbicacionModificar))) {
@@ -151,6 +167,7 @@ public class Main {
                     break;
 
                 case 6:
+                    // Eliminar una ubicación del grafo
                     if (nombresUbicaciones.isEmpty()) {
                         System.out.println("No hay ubicaciones agregadas para eliminar.");
                         break;
@@ -172,6 +189,7 @@ public class Main {
                     break;
 
                 case 7:
+                    // Modificar el peso de una arista en el grafo
                     if (nombresUbicaciones.isEmpty()) {
                         System.out.println("No hay pesos agregados para Modificarr.");
                         break;
@@ -186,6 +204,7 @@ public class Main {
                     break;
                     
                 case 8:
+                    // Eliminar el peso de una arista en el grafo
                     if (nombresUbicaciones.isEmpty()) {
                         System.out.println("No hay pesos agregadas para Eliminar.");
                         break;
@@ -198,6 +217,7 @@ public class Main {
                     break;
                     
                 case 9:
+                    // Modificar el tiempo de una arista en el grafo
                     if (nombresUbicaciones.isEmpty()) {
                         System.out.println("No hay tiempos agregados para Modificar.");
                         break;
@@ -212,6 +232,7 @@ public class Main {
                     break;
                     
                 case 10:
+                    // Eliminar el tiempo de una arista en el grafo
                     if (nombresUbicaciones.isEmpty()) {
                         System.out.println("No hay tiempos agregadas para Eliminar.");
                         break;
@@ -225,6 +246,7 @@ public class Main {
               
 
                 case 11:
+                    // Calcular Ruta con el metodo de Árbol de Expansión Mínima (Prim)
                     System.out.print("Ingrese el nombre de la ubicación de origen para el Árbol de Expansión Mínima (Prim): ");
                     String nombreOrigenPrim = scanner.nextLine().toLowerCase();
                     Ubicacion ubicacionOrigenPrim = new Ubicacion(nombreOrigenPrim);
@@ -238,6 +260,7 @@ public class Main {
                     break;
 
                 case 12:
+                    // Calcular Ruta con el metodo de Árbol de Expansión Mínima (Kruskal)
                     System.out.print("Ingrese el nombre de la ubicación de origen para el Árbol de Expansión Mínima (Kruskal): ");
                     String nombreOrigenKruskal = scanner.nextLine().toLowerCase();
                     Ubicacion ubicacionOrigenKruskal = new Ubicacion(nombreOrigenKruskal);
@@ -255,6 +278,7 @@ public class Main {
                     break;
 
                 case 13:
+                    // Calcular Ruta con el metodo de algoritmo de Floyd-Warshall
                     System.out.print("Ingrese el nombre de la ubicación de origen para el algoritmo de Floyd-Warshall: ");
                     String nombreOrigenFloyd = scanner.nextLine().toLowerCase();
                     Ubicacion ubicacionOrigenFloyd = new Ubicacion(nombreOrigenFloyd);
@@ -283,6 +307,7 @@ public class Main {
 
 
                 case 14:
+                    // Esto son los planificadores de ruta, mas cortas en ubicaciones.
                     System.out.print("Ingrese el nombre de la ubicación de origen para planificar la ruta: ");
                     String nombreOrigenRutaPlanificacion = scanner.nextLine().toLowerCase();
                     Ubicacion ubicacionOrigenRuta = new Ubicacion(nombreOrigenRutaPlanificacion);
@@ -303,6 +328,7 @@ public class Main {
                     break;
 
                 case 15:
+                    // Este calcular la ruta mas corta planificada, pero con el tiempo.
                     System.out.print("Ingrese el nombre de la ubicación de origen para planificar la ruta: ");
                     String nombreOrigenTiempo = scanner.nextLine().toLowerCase();
                     Ubicacion ubicacionOrigenTiempo = new Ubicacion(nombreOrigenTiempo);
@@ -323,11 +349,11 @@ public class Main {
                     break;
 
                 case 16:
+                    // La opcion De salir, mensaje de despedida
                     System.out.println("¡Hasta luego!");
                     System.exit(0);
 
-                
-
+                    // Validador si las opciones puestas son incorrectas
                 default:
                     System.out.println("Opción inválida! Por favor, ingrese un número del 1 al 5.");
             }
