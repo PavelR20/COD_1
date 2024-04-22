@@ -125,6 +125,78 @@ public class CrudVisual extends JFrame {
             }
         });
         panel.add(btnEliminarUbicacion);
+        
+        
+     // Modificar Peso
+        JButton btnModificarPeso = new JButton("Modificar Peso de Arista");
+        customizeButton(btnModificarPeso);
+        btnModificarPeso.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (nombresUbicaciones.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "No hay aristas agregadas para modificar el peso.");
+                    return;
+                }
+                String nombreOrigen = JOptionPane.showInputDialog("Ingrese el nombre del origen:");
+                if (nombreOrigen == null || nombreOrigen.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Debe ingresar un nombre de origen válido.");
+                    return;
+                }
+                String nombreDestino = JOptionPane.showInputDialog("Ingrese el nombre del destino:");
+                if (nombreDestino == null || nombreDestino.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Debe ingresar un nombre de destino válido.");
+                    return;
+                }
+                String nuevoPesoStr = JOptionPane.showInputDialog("Ingrese el nuevo peso de la arista:");
+                try {
+                    int nuevoPeso = Integer.parseInt(nuevoPesoStr);
+                    if (nuevoPeso <= 0) {
+                        JOptionPane.showMessageDialog(null, "El peso debe ser un número positivo mayor que cero.");
+                        return;
+                    }
+                    grafo.modificarPesoArista(nombreOrigen, nombreDestino, nuevoPeso);
+                    JOptionPane.showMessageDialog(null, "Peso de arista modificado exitosamente.");
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Ingrese un número válido para el peso.");
+                }
+            }
+        });
+        panel.add(btnModificarPeso);
+
+     // Modificar Tiempo
+        JButton btnModificarTiempo = new JButton("Modificar Tiempo de Arista");
+        customizeButton(btnModificarTiempo);
+        btnModificarTiempo.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (nombresUbicaciones.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "No hay aristas agregadas para modificar el tiempo.");
+                    return;
+                }
+                String nombreOrigen = JOptionPane.showInputDialog("Ingrese el nombre del origen:");
+                if (nombreOrigen == null || nombreOrigen.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Debe ingresar un nombre de origen válido.");
+                    return;
+                }
+                String nombreDestino = JOptionPane.showInputDialog("Ingrese el nombre del destino:");
+                if (nombreDestino == null || nombreDestino.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Debe ingresar un nombre de destino válido.");
+                    return;
+                }
+                String nuevoTiempoStr = JOptionPane.showInputDialog("Ingrese el nuevo tiempo de la arista:");
+                try {
+                    int nuevoTiempo = Integer.parseInt(nuevoTiempoStr);
+                    if (nuevoTiempo <= 0) {
+                        JOptionPane.showMessageDialog(null, "El tiempo debe ser un número positivo mayor que cero.");
+                        return;
+                    }
+                    grafo.modificarTiempoArista(nombreOrigen, nombreDestino, nuevoTiempo);
+                    JOptionPane.showMessageDialog(null, "Tiempo de arista modificado exitosamente.");
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Ingrese un número válido para el tiempo.");
+                }
+            }
+        });
+        panel.add(btnModificarTiempo);
+
 
         JButton btnPrim = new JButton("Calcular Árbol de Expansión Mínima (Prim)");
         customizeButton(btnPrim);
@@ -152,10 +224,32 @@ public class CrudVisual extends JFrame {
             }
         });
         panel.add(btnRutaMasCorta);
+        
+        
+        JButton btnPlanificarDistancia = new JButton("Planificar Ruta Minimizando Distancia");
+        customizeButton(btnPlanificarDistancia);
+        btnPlanificarDistancia.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                planificarRuta(false);
+            }
+        });
+        panel.add(btnPlanificarDistancia);
+
+        JButton btnPlanificarTiempo = new JButton("Planificar Ruta Minimizando Tiempo");
+        customizeButton(btnPlanificarTiempo);
+        btnPlanificarTiempo.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                planificarRuta(true);
+            }
+        });
+        panel.add(btnPlanificarTiempo);
+        
+        
 
         add(panel);
         setVisible(true);
     }
+    
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -169,7 +263,36 @@ public class CrudVisual extends JFrame {
             }
         });
     }
+    
+    
+ // Método para planificar ruta corta
+    private void planificarRuta(boolean minimizarTiempo) {
+        String mensaje = minimizarTiempo ? "minimizando el tiempo" : "minimizando la distancia";
+        String nombreOrigen = JOptionPane.showInputDialog(null, "Ingrese el nombre de la ubicación de origen para planificar la ruta:");
+        String nombreDestino = JOptionPane.showInputDialog(null, "Ingrese el nombre de la ubicación de destino para planificar la ruta:");
 
+        if (nombreOrigen == null || nombreDestino == null || nombreOrigen.isEmpty() || nombreDestino.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No se han proporcionado ubicaciones para planificar rutas.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        Ubicacion ubicacionOrigen = new Ubicacion(nombreOrigen);
+        Ubicacion ubicacionDestino = new Ubicacion(nombreDestino);
+
+        if (grafo.existeUbicacion(ubicacionOrigen) && grafo.existeUbicacion(ubicacionDestino)) {
+            JOptionPane.showMessageDialog(null, "Calculando ruta más corta " + mensaje + " desde " + nombreOrigen + " a " + nombreDestino + "...");
+            Map<Ubicacion, Integer> distancias = grafo.planificarRuta(ubicacionOrigen, ubicacionDestino, minimizarTiempo);
+            String metrica = minimizarTiempo ? "Tiempo" : "Distancia";
+            StringBuilder ruta = new StringBuilder();
+            ruta.append(metrica).append(" a ");
+            for (Map.Entry<Ubicacion, Integer> entry : distancias.entrySet()) {
+                ruta.append(entry.getKey().getNombre()).append(": ").append(entry.getValue()).append("\n");
+            }
+            JOptionPane.showMessageDialog(null, ruta.toString(), "Ruta Calculada", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, "Una o ambas ubicaciones no existen en el grafo.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
     // Método para personalizar los botones
     private void customizeButton(JButton button) {
         button.setBackground(new Color(240, 240, 240)); // Color de fondo
@@ -196,7 +319,7 @@ public class CrudVisual extends JFrame {
         String nombreOrigenKruskal = JOptionPane.showInputDialog("Ingrese el nombre de la ubicación de origen para el Árbol de Expansión Mínima (Kruskal):");
         Ubicacion ubicacionOrigenKruskal = new Ubicacion(nombreOrigenKruskal);
         if (grafo.existeUbicacion(ubicacionOrigenKruskal)) {
-            Set<Arista> arbolExpansionMinima = (Set<Arista>) grafo.kruskal();
+        	Set<Arista> arbolExpansionMinima = new HashSet<>(grafo.kruskal());
             int totalWeight = 0;
             StringBuilder sb = new StringBuilder();
             for (Arista arista : arbolExpansionMinima) {
@@ -225,5 +348,7 @@ public class CrudVisual extends JFrame {
         }
     }
     
+    
+
     
 }

@@ -4,7 +4,7 @@ class Arista {
     private final Ubicacion origen;
     private Ubicacion destino; // Cambio: Ahora destino puede ser modificado
     private int peso;
-    private final int tiempo; // Nuevo campo de tiempo
+    private int tiempo; // Nuevo campo de tiempo
 
     public Arista(Ubicacion origen, Ubicacion destino, int peso, int tiempo) {
         this.origen = origen;
@@ -38,6 +38,10 @@ class Arista {
     // Nuevo método getTiempo
     public int getTiempo() {
         return tiempo;
+    }
+    
+    public void setTiempo(int tiempo) {
+        this.tiempo = tiempo;
     }
 
     @Override
