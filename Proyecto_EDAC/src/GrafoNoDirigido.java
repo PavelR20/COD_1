@@ -101,6 +101,26 @@ public class GrafoNoDirigido {
 
         return false;
     }
+    
+    public void modificarTiempoArista(String origen, String destino, int nuevoTiempo) {
+        if (!existeArista(origen, destino)) {
+            System.out.println("No existe una arista entre " + origen + " y " + destino + ".");
+            return;
+        }
+
+        Ubicacion ubicacionOrigen = new Ubicacion(origen);
+        Ubicacion ubicacionDestino = new Ubicacion(destino);
+
+        List<Arista> aristasOrigen = listaAdyacencia.get(ubicacionOrigen);
+        for (Arista arista : aristasOrigen) {
+            if (arista.getDestino().equals(ubicacionDestino)) {
+                arista.setTiempo(nuevoTiempo);
+                System.out.println("Tiempo de la arista entre " + origen + " y " + destino + " modificado a " + nuevoTiempo + ".");
+                break;
+            }
+        }
+    }
+
 
     // Método para modificar el tiempo de una arista entre dos ubicaciones
     public void modificarTiempoArista(String origen, String destino, int nuevoTiempo) {
