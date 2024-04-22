@@ -1,5 +1,5 @@
 import java.util.*;
-
+//
 class DisjointSet {
     private Map<Ubicacion, Ubicacion> parent;
     private Map<Ubicacion, Integer> rank;
