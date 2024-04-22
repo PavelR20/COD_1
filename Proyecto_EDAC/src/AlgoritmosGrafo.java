@@ -1,3 +1,4 @@
+import java.util.Comparator;
 import java.util.PriorityQueue;
 
 // Definición de la clase AlgoritmosGrafo
@@ -13,7 +14,7 @@ class AlgoritmosGrafo {
 
         // Inicialización de los arreglos
         for (int i = 0; i < graph.length; i++) {
-            distance[i] = INF; // Inicialmente todas las distancias son infinito
+            distance[i] = INF; // Inicialmente, todas las distancias son infinito
             visited[i] = false; // Inicialmente ningún nodo ha sido visitado
         }
 
@@ -21,7 +22,7 @@ class AlgoritmosGrafo {
 
         // Cola de prioridad para seleccionar el siguiente nodo con la menor distancia
         PriorityQueue<Node> pq = new PriorityQueue<>(
-                (a, b) -> Integer.compare(a.distance, b.distance)
+                Comparator.comparingInt(a -> a.distance)
         );
 
         pq.add(new Node(0, 0)); // Agrega el nodo origen a la cola de prioridad
@@ -59,7 +60,7 @@ class AlgoritmosGrafo {
     }
 
     // Clase interna para representar un nodo con su distancia desde el nodo origen
-    private class Node {
+    private static class Node {
         int vertex; // Índice del nodo
         int distance; // Distancia desde el nodo origen
 

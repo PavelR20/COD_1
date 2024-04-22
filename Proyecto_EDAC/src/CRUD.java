@@ -1,8 +1,8 @@
 import java.util.*;
 //
 class DisjointSet {
-    private Map<Ubicacion, Ubicacion> parent;
-    private Map<Ubicacion, Integer> rank;
+    private final Map<Ubicacion, Ubicacion> parent;
+    private final Map<Ubicacion, Integer> rank;
 
     public DisjointSet() {
         parent = new HashMap<>();

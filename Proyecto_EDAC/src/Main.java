@@ -9,7 +9,6 @@ public class Main {
         GrafoNoDirigido grafo = new GrafoNoDirigido();
         // Un conjunto para almacenar los nombres de las ubicaciones
         Set<String> nombresUbicaciones = new HashSet<>();
-        boolean agregarMasTiempos = true;
 
         // Bucle principal que muestra el menú y maneja las acciones del usuario
         while (true) {
@@ -252,7 +251,7 @@ public class Main {
                     Ubicacion ubicacionOrigenPrim = new Ubicacion(nombreOrigenPrim);
                     if (grafo.existeUbicacion(ubicacionOrigenPrim)) {
                         AlgoritmosGrafo algoritmos = new AlgoritmosGrafo();
-                        int mstWeight = algoritmos.prim(grafo.generarMatrizAdyacencia(ubicacionOrigenPrim));
+                        int mstWeight = algoritmos.prim(grafo.generarMatrizAdyacencia());
                         System.out.println("Peso del árbol de expansión mínima desde " + nombreOrigenPrim + ": " + mstWeight);
                     } else {
                         System.out.println("La ubicación de origen no existe en el grafo.");
@@ -284,18 +283,17 @@ public class Main {
                     Ubicacion ubicacionOrigenFloyd = new Ubicacion(nombreOrigenFloyd);
                     if (grafo.existeUbicacion(ubicacionOrigenFloyd)) {
                         System.out.println("Ejecutando el algoritmo de Floyd-Warshall...");
-                        int[][] matrizAdyacencia = grafo.generarMatrizAdyacencia(ubicacionOrigenFloyd); // Generar matriz de adyacencia
-                        AlgoritmosGrafo algoritmosGrafo = new AlgoritmosGrafo();
-                        int[][] distancias = algoritmosGrafo.floydWarshall(matrizAdyacencia); // Pasar la matriz de adyacencia a floydWarshall
+                        int[][] matrizAdyacencia = grafo.generarMatrizAdyacencia(); // Generar matriz de adyacencia
+                        int[][] distancias = AlgoritmosGrafo.floydWarshall(matrizAdyacencia); // Pasar la matriz de adyacencia a floydWarshall
 
                         // Imprimir la matriz de distancias mínimas
                         System.out.println("Matriz de distancias mínimas:");
-                        for (int i = 0; i < distancias.length; i++) {
-                            for (int j = 0; j < distancias[i].length; j++) {
-                                if (distancias[i][j] == AlgoritmosGrafo.INF) {
+                        for (int[] distancia : distancias) {
+                            for (int i : distancia) {
+                                if (i == AlgoritmosGrafo.INF) {
                                     System.out.print("INF ");
                                 } else {
-                                    System.out.print(distancias[i][j] + " ");
+                                    System.out.print(i + " ");
                                 }
                             }
                             System.out.println();
@@ -307,7 +305,7 @@ public class Main {
 
 
                 case 14:
-                    // Esto son los planificadores de ruta, mas cortas en ubicaciones.
+                    // Esto son los planificadores de ruta, más cortas en ubicaciones.
                     System.out.print("Ingrese el nombre de la ubicación de origen para planificar la ruta: ");
                     String nombreOrigenRutaPlanificacion = scanner.nextLine().toLowerCase();
                     Ubicacion ubicacionOrigenRuta = new Ubicacion(nombreOrigenRutaPlanificacion);
@@ -328,7 +326,7 @@ public class Main {
                     break;
 
                 case 15:
-                    // Este calcular la ruta mas corta planificada, pero con el tiempo.
+                    // Este calcular la ruta más corta planificada, pero con el tiempo.
                     System.out.print("Ingrese el nombre de la ubicación de origen para planificar la ruta: ");
                     String nombreOrigenTiempo = scanner.nextLine().toLowerCase();
                     Ubicacion ubicacionOrigenTiempo = new Ubicacion(nombreOrigenTiempo);

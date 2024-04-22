@@ -1,13 +1,11 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.*;
 
 // Clase principal que representa la interfaz gráfica CRUD
 public class CrudVisual extends JFrame {
-    private GrafoNoDirigido grafo; // Grafo utilizado para almacenar las ubicaciones y las aristas
-    private Set<String> nombresUbicaciones; // Conjunto para almacenar los nombres de las ubicaciones
+    private final GrafoNoDirigido grafo; // Grafo utilizado para almacenar las ubicaciones y las aristas
+    private final Set<String> nombresUbicaciones; // Conjunto para almacenar los nombres de las ubicaciones
 
     // Constructor de la clase CrudVisual
     public CrudVisual() {
@@ -25,17 +23,15 @@ public class CrudVisual extends JFrame {
         // Botón para agregar una ubicación
         JButton btnAgregarUbicacion = new JButton("Agregar Ubicación");
         customizeButton(btnAgregarUbicacion); // Personaliza el botón
-        btnAgregarUbicacion.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // Abre un cuadro de diálogo para ingresar el nombre de la ubicación
-                String nombre = JOptionPane.showInputDialog("Ingrese el nombre de la ubicación:");
-                if (nombre != null && !nombre.isEmpty()) {
-                    grafo.agregarUbicacion(new Ubicacion(nombre)); // Agrega la ubicación al grafo
-                    nombresUbicaciones.add(nombre); // Agrega el nombre al conjunto
-                    JOptionPane.showMessageDialog(null, "Ubicación agregada exitosamente.");
-                } else {
-                    JOptionPane.showMessageDialog(null, "Debe ingresar un nombre válido.");
-                }
+        btnAgregarUbicacion.addActionListener(e -> {
+            // Abre un cuadro de diálogo para ingresar el nombre de la ubicación
+            String nombre = JOptionPane.showInputDialog("Ingrese el nombre de la ubicación:");
+            if (nombre != null && !nombre.isEmpty()) {
+                grafo.agregarUbicacion(new Ubicacion(nombre)); // Agrega la ubicación al grafo
+                nombresUbicaciones.add(nombre); // Agrega el nombre al conjunto
+                JOptionPane.showMessageDialog(null, "Ubicación agregada exitosamente.");
+            } else {
+                JOptionPane.showMessageDialog(null, "Debe ingresar un nombre válido.");
             }
         });
         panel.add(btnAgregarUbicacion); // Agrega el botón al panel
@@ -43,75 +39,67 @@ public class CrudVisual extends JFrame {
         // Botón para agregar una arista con peso y tiempo
         JButton btnAgregarArista = new JButton("Agregar Arista con Peso y Tiempo");
         customizeButton(btnAgregarArista);
-        btnAgregarArista.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // Solicita al usuario los nombres de origen y destino, peso y tiempo de la arista
-                if (nombresUbicaciones.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "No hay ubicaciones agregadas para asignarle un peso.");
-                    return;
-                }
-                String nombreOrigen = JOptionPane.showInputDialog("Ingrese el nombre del origen:");
-                if (nombreOrigen == null || nombreOrigen.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Debe ingresar un nombre de origen válido.");
-                    return;
-                }
-                String nombreDestino = JOptionPane.showInputDialog("Ingrese el nombre del destino:");
-                if (nombreDestino == null || nombreDestino.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Debe ingresar un nombre de destino válido.");
-                    return;
-                }
-                int peso, tiempo;
-                try {
-                    peso = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el peso de la arista:"));
-                    tiempo = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el tiempo de la arista:"));
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(null, "Ingrese valores numéricos válidos para el peso y el tiempo.");
-                    return;
-                }
-                if (peso <= 0 || tiempo <= 0) {
-                    JOptionPane.showMessageDialog(null, "El peso y el tiempo deben ser valores positivos.");
-                    return;
-                }
-                if (grafo.existeArista(nombreOrigen, nombreDestino)) {
-                    JOptionPane.showMessageDialog(null, "Ya se ha agregado un peso para la arista entre " + nombreOrigen + " y " + nombreDestino + ".");
-                    return;
-                }
-                grafo.agregarArista(new Ubicacion(nombreOrigen), new Ubicacion(nombreDestino), peso, tiempo);
-                JOptionPane.showMessageDialog(null, "Arista agregada correctamente.");
+        btnAgregarArista.addActionListener(e -> {
+            // Solicita al usuario los nombres de origen y destino, peso y tiempo de la arista
+            if (nombresUbicaciones.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "No hay ubicaciones agregadas para asignarle un peso.");
+                return;
             }
+            String nombreOrigen = JOptionPane.showInputDialog("Ingrese el nombre del origen:");
+            if (nombreOrigen == null || nombreOrigen.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Debe ingresar un nombre de origen válido.");
+                return;
+            }
+            String nombreDestino = JOptionPane.showInputDialog("Ingrese el nombre del destino:");
+            if (nombreDestino == null || nombreDestino.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Debe ingresar un nombre de destino válido.");
+                return;
+            }
+            int peso, tiempo;
+            try {
+                peso = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el peso de la arista:"));
+                tiempo = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el tiempo de la arista:"));
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(null, "Ingrese valores numéricos válidos para el peso y el tiempo.");
+                return;
+            }
+            if (peso <= 0 || tiempo <= 0) {
+                JOptionPane.showMessageDialog(null, "El peso y el tiempo deben ser valores positivos.");
+                return;
+            }
+            if (grafo.existeArista(nombreOrigen, nombreDestino)) {
+                JOptionPane.showMessageDialog(null, "Ya se ha agregado un peso para la arista entre " + nombreOrigen + " y " + nombreDestino + ".");
+                return;
+            }
+            grafo.agregarArista(new Ubicacion(nombreOrigen), new Ubicacion(nombreDestino), peso, tiempo);
+            JOptionPane.showMessageDialog(null, "Arista agregada correctamente.");
         });
         panel.add(btnAgregarArista);
 
         // Botón para imprimir las ubicaciones
         JButton btnImprimirUbicaciones = new JButton("Imprimir Ubicaciones");
         customizeButton(btnImprimirUbicaciones);
-        btnImprimirUbicaciones.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                grafo.imprimirUbicaciones();
-            }
-        });
+        btnImprimirUbicaciones.addActionListener(e -> grafo.imprimirUbicaciones());
         panel.add(btnImprimirUbicaciones);
 
         // Botón para modificar una ubicación
         JButton btnModificarUbicacion = new JButton("Modificar Ubicación");
         customizeButton(btnModificarUbicacion);
-        btnModificarUbicacion.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // Solicita al usuario el nombre de la ubicación a modificar y el nuevo nombre
-                String nombreViejo = JOptionPane.showInputDialog("Ingrese el nombre de la ubicación a modificar:");
-                if (nombreViejo != null && !nombreViejo.isEmpty()) {
-                    String nuevoNombre = JOptionPane.showInputDialog("Ingrese el nuevo nombre de la ubicación:");
-                    if (nuevoNombre != null && !nuevoNombre.isEmpty()) {
-                        grafo.modificarUbicacion(nombreViejo, nuevoNombre);
-                        nombresUbicaciones.remove(nombreViejo);
-                        nombresUbicaciones.add(nuevoNombre);
-                        JOptionPane.showMessageDialog(null, "Ubicación modificada exitosamente.");
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Debe ingresar un nuevo nombre válido.");
-                    }
+        btnModificarUbicacion.addActionListener(e -> {
+            // Solicita al usuario el nombre de la ubicación a modificar y el nuevo nombre
+            String nombreViejo = JOptionPane.showInputDialog("Ingrese el nombre de la ubicación a modificar:");
+            if (nombreViejo != null && !nombreViejo.isEmpty()) {
+                String nuevoNombre = JOptionPane.showInputDialog("Ingrese el nuevo nombre de la ubicación:");
+                if (nuevoNombre != null && !nuevoNombre.isEmpty()) {
+                    grafo.modificarUbicacion(nombreViejo, nuevoNombre);
+                    nombresUbicaciones.remove(nombreViejo);
+                    nombresUbicaciones.add(nuevoNombre);
+                    JOptionPane.showMessageDialog(null, "Ubicación modificada exitosamente.");
                 } else {
-                    JOptionPane.showMessageDialog(null, "Debe ingresar un nombre válido.");
+                    JOptionPane.showMessageDialog(null, "Debe ingresar un nuevo nombre válido.");
                 }
+            } else {
+                JOptionPane.showMessageDialog(null, "Debe ingresar un nombre válido.");
             }
         });
         panel.add(btnModificarUbicacion);
@@ -119,17 +107,15 @@ public class CrudVisual extends JFrame {
         // Botón para eliminar una ubicación
         JButton btnEliminarUbicacion = new JButton("Eliminar Ubicación");
         customizeButton(btnEliminarUbicacion);
-        btnEliminarUbicacion.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // Solicita al usuario el nombre de la ubicación a eliminar
-                String nombre = JOptionPane.showInputDialog("Ingrese el nombre de la ubicación a eliminar:");
-                if (nombre != null && !nombre.isEmpty()) {
-                    grafo.eliminarUbicacion(nombre);
-                    nombresUbicaciones.remove(nombre);
-                    JOptionPane.showMessageDialog(null, "Ubicación eliminada exitosamente.");
-                } else {
-                    JOptionPane.showMessageDialog(null, "Debe ingresar un nombre válido.");
-                }
+        btnEliminarUbicacion.addActionListener(e -> {
+            // Solicita al usuario el nombre de la ubicación a eliminar
+            String nombre = JOptionPane.showInputDialog("Ingrese el nombre de la ubicación a eliminar:");
+            if (nombre != null && !nombre.isEmpty()) {
+                grafo.eliminarUbicacion(nombre);
+                nombresUbicaciones.remove(nombre);
+                JOptionPane.showMessageDialog(null, "Ubicación eliminada exitosamente.");
+            } else {
+                JOptionPane.showMessageDialog(null, "Debe ingresar un nombre válido.");
             }
         });
         panel.add(btnEliminarUbicacion);
@@ -137,35 +123,33 @@ public class CrudVisual extends JFrame {
         // Botón para modificar el peso de una arista
         JButton btnModificarPeso = new JButton("Modificar Peso de Arista");
         customizeButton(btnModificarPeso);
-        btnModificarPeso.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // Solicita al usuario el nombre del origen y destino de la arista y el nuevo peso
-                if (nombresUbicaciones.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "No hay aristas agregadas para modificar el peso.");
+        btnModificarPeso.addActionListener(e -> {
+            // Solicita al usuario el nombre del origen y destino de la arista y el nuevo peso
+            if (nombresUbicaciones.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "No hay aristas agregadas para modificar el peso.");
+                return;
+            }
+            String nombreOrigen = JOptionPane.showInputDialog("Ingrese el nombre del origen:");
+            if (nombreOrigen == null || nombreOrigen.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Debe ingresar un nombre de origen válido.");
+                return;
+            }
+            String nombreDestino = JOptionPane.showInputDialog("Ingrese el nombre del destino:");
+            if (nombreDestino == null || nombreDestino.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Debe ingresar un nombre de destino válido.");
+                return;
+            }
+            String nuevoPesoStr = JOptionPane.showInputDialog("Ingrese el nuevo peso de la arista:");
+            try {
+                int nuevoPeso = Integer.parseInt(nuevoPesoStr);
+                if (nuevoPeso <= 0) {
+                    JOptionPane.showMessageDialog(null, "El peso debe ser un número positivo mayor que cero.");
                     return;
                 }
-                String nombreOrigen = JOptionPane.showInputDialog("Ingrese el nombre del origen:");
-                if (nombreOrigen == null || nombreOrigen.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Debe ingresar un nombre de origen válido.");
-                    return;
-                }
-                String nombreDestino = JOptionPane.showInputDialog("Ingrese el nombre del destino:");
-                if (nombreDestino == null || nombreDestino.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Debe ingresar un nombre de destino válido.");
-                    return;
-                }
-                String nuevoPesoStr = JOptionPane.showInputDialog("Ingrese el nuevo peso de la arista:");
-                try {
-                    int nuevoPeso = Integer.parseInt(nuevoPesoStr);
-                    if (nuevoPeso <= 0) {
-                        JOptionPane.showMessageDialog(null, "El peso debe ser un número positivo mayor que cero.");
-                        return;
-                    }
-                    grafo.modificarPesoArista(nombreOrigen, nombreDestino, nuevoPeso);
-                    JOptionPane.showMessageDialog(null, "Peso de arista modificado exitosamente.");
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(null, "Ingrese un número válido para el peso.");
-                }
+                grafo.modificarPesoArista(nombreOrigen, nombreDestino, nuevoPeso);
+                JOptionPane.showMessageDialog(null, "Peso de arista modificado exitosamente.");
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(null, "Ingrese un número válido para el peso.");
             }
         });
         panel.add(btnModificarPeso);
@@ -173,35 +157,33 @@ public class CrudVisual extends JFrame {
         // Botón para modificar el tiempo de una arista
         JButton btnModificarTiempo = new JButton("Modificar Tiempo de Arista");
         customizeButton(btnModificarTiempo);
-        btnModificarTiempo.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // Solicita al usuario el nombre del origen y destino de la arista y el nuevo tiempo
-                if (nombresUbicaciones.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "No hay aristas agregadas para modificar el tiempo.");
+        btnModificarTiempo.addActionListener(e -> {
+            // Solicita al usuario el nombre del origen y destino de la arista y el nuevo tiempo
+            if (nombresUbicaciones.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "No hay aristas agregadas para modificar el tiempo.");
+                return;
+            }
+            String nombreOrigen = JOptionPane.showInputDialog("Ingrese el nombre del origen:");
+            if (nombreOrigen == null || nombreOrigen.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Debe ingresar un nombre de origen válido.");
+                return;
+            }
+            String nombreDestino = JOptionPane.showInputDialog("Ingrese el nombre del destino:");
+            if (nombreDestino == null || nombreDestino.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Debe ingresar un nombre de destino válido.");
+                return;
+            }
+            String nuevoTiempoStr = JOptionPane.showInputDialog("Ingrese el nuevo tiempo de la arista:");
+            try {
+                int nuevoTiempo = Integer.parseInt(nuevoTiempoStr);
+                if (nuevoTiempo <= 0) {
+                    JOptionPane.showMessageDialog(null, "El tiempo debe ser un número positivo mayor que cero.");
                     return;
                 }
-                String nombreOrigen = JOptionPane.showInputDialog("Ingrese el nombre del origen:");
-                if (nombreOrigen == null || nombreOrigen.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Debe ingresar un nombre de origen válido.");
-                    return;
-                }
-                String nombreDestino = JOptionPane.showInputDialog("Ingrese el nombre del destino:");
-                if (nombreDestino == null || nombreDestino.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Debe ingresar un nombre de destino válido.");
-                    return;
-                }
-                String nuevoTiempoStr = JOptionPane.showInputDialog("Ingrese el nuevo tiempo de la arista:");
-                try {
-                    int nuevoTiempo = Integer.parseInt(nuevoTiempoStr);
-                    if (nuevoTiempo <= 0) {
-                        JOptionPane.showMessageDialog(null, "El tiempo debe ser un número positivo mayor que cero.");
-                        return;
-                    }
-                    grafo.modificarTiempoArista(nombreOrigen, nombreDestino, nuevoTiempo);
-                    JOptionPane.showMessageDialog(null, "Tiempo de arista modificado exitosamente.");
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(null, "Ingrese un número válido para el tiempo.");
-                }
+                grafo.modificarTiempoArista(nombreOrigen, nombreDestino, nuevoTiempo);
+                JOptionPane.showMessageDialog(null, "Tiempo de arista modificado exitosamente.");
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(null, "Ingrese un número válido para el tiempo.");
             }
         });
         panel.add(btnModificarTiempo);
@@ -209,50 +191,40 @@ public class CrudVisual extends JFrame {
         // Botón para ejecutar el algoritmo de Prim
         JButton btnPrim = new JButton("Calcular Árbol de Expansión Mínima (Prim)");
         customizeButton(btnPrim);
-        btnPrim.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                ejecutarPrim(); // Llama al método para ejecutar Prim
-            }
+        btnPrim.addActionListener(e -> {
+            ejecutarPrim(); // Llama al método para ejecutar Prim
         });
         panel.add(btnPrim);
 
         // Botón para ejecutar el algoritmo de Kruskal
         JButton btnKruskal = new JButton("Calcular Árbol de Expansión Mínima (Kruskal)");
         customizeButton(btnKruskal);
-        btnKruskal.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                ejecutarKruskal(); // Llama al método para ejecutar Kruskal
-            }
+        btnKruskal.addActionListener(e -> {
+            ejecutarKruskal(); // Llama al método para ejecutar Kruskal
         });
         panel.add(btnKruskal);
 
         // Botón para calcular la ruta más corta
         JButton btnRutaMasCorta = new JButton("Calcular Ruta Más Corta");
         customizeButton(btnRutaMasCorta);
-        btnRutaMasCorta.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                ejecutarRutaMasCorta(); // Llama al método para calcular la ruta más corta
-            }
+        btnRutaMasCorta.addActionListener(e -> {
+            ejecutarRutaMasCorta(); // Llama al método para calcular la ruta más corta
         });
         panel.add(btnRutaMasCorta);
 
         // Botón para planificar una ruta minimizando la distancia
         JButton btnPlanificarDistancia = new JButton("Planificar Ruta Minimizando Distancia");
         customizeButton(btnPlanificarDistancia);
-        btnPlanificarDistancia.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                planificarRuta(false); // Llama al método para planificar la ruta minimizando la distancia
-            }
+        btnPlanificarDistancia.addActionListener(e -> {
+            planificarRuta(false); // Llama al método para planificar la ruta minimizando la distancia
         });
         panel.add(btnPlanificarDistancia);
 
         // Botón para planificar una ruta minimizando el tiempo
         JButton btnPlanificarTiempo = new JButton("Planificar Ruta Minimizando Tiempo");
         customizeButton(btnPlanificarTiempo);
-        btnPlanificarTiempo.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                planificarRuta(true); // Llama al método para planificar la ruta minimizando el tiempo
-            }
+        btnPlanificarTiempo.addActionListener(e -> {
+            planificarRuta(true); // Llama al método para planificar la ruta minimizando el tiempo
         });
         panel.add(btnPlanificarTiempo);
 
@@ -262,15 +234,13 @@ public class CrudVisual extends JFrame {
 
     // Método principal para iniciar la aplicación
     public static void main(String[] args) {
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    CrudVisual frame = new CrudVisual();
-                    frame.setResizable(true); // Permite que la ventana sea redimensionable
-                    frame.setVisible(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        EventQueue.invokeLater(() -> {
+            try {
+                CrudVisual frame = new CrudVisual();
+                frame.setResizable(true); // Permite que la ventana sea dimensional
+                frame.setVisible(true);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
     }
@@ -325,7 +295,7 @@ public class CrudVisual extends JFrame {
         Ubicacion ubicacionOrigenPrim = new Ubicacion(nombreOrigenPrim);
         if (grafo.existeUbicacion(ubicacionOrigenPrim)) {
             AlgoritmosGrafo algoritmos = new AlgoritmosGrafo();
-            int mstWeight = algoritmos.prim(grafo.generarMatrizAdyacencia(ubicacionOrigenPrim));
+            int mstWeight = algoritmos.prim(grafo.generarMatrizAdyacencia());
             JOptionPane.showMessageDialog(null, "Peso del árbol de expansión mínima desde " + nombreOrigenPrim + ": " + mstWeight);
         } else {
             JOptionPane.showMessageDialog(null, "La ubicación de origen no existe en el grafo.");
@@ -344,7 +314,7 @@ public class CrudVisual extends JFrame {
                 sb.append(arista.getOrigen().getNombre()).append(" - ").append(arista.getDestino().getNombre()).append(": ").append(arista.getPeso()).append("\n");
                 totalWeight += arista.getPeso();
             }
-            JOptionPane.showMessageDialog(null, sb.toString() + "Peso total del árbol de expansión mínima desde " + nombreOrigenKruskal + ": " + totalWeight);
+            JOptionPane.showMessageDialog(null, sb + "Peso total del árbol de expansión mínima desde " + nombreOrigenKruskal + ": " + totalWeight);
         } else {
             JOptionPane.showMessageDialog(null, "La ubicación de origen no existe en el grafo.");
         }

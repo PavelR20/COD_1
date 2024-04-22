@@ -19,11 +19,6 @@ public class GrafoNoDirigido {
         listaAdyacencia = new HashMap<>();
     }
 
-    // Método para verificar si existen ubicaciones en el grafo
-    public boolean hayUbicaciones() {
-        return !listaAdyacencia.isEmpty();
-    }
-
     // Método para modificar el nombre de una ubicación en el grafo
     public void modificarUbicacion(String nombreViejo, String nuevoNombre) {
         // Crear objetos Ubicacion para representar la ubicación vieja y la nueva
@@ -192,7 +187,7 @@ public class GrafoNoDirigido {
         // Mapa para almacenar las distancias desde la ubicación de origen a todas las demás ubicaciones
         Map<Ubicacion, Integer> distancias = new HashMap<>();
         // Cola de prioridad para almacenar las aristas ordenadas por distancia
-        PriorityQueue<Arista> colaPrioridad = new PriorityQueue<>((a, b) -> a.getPeso() - b.getPeso());
+        PriorityQueue<Arista> colaPrioridad = new PriorityQueue<>(Comparator.comparingInt(Arista::getPeso));
         // Conjunto para almacenar las ubicaciones visitadas durante el proceso
         Set<Ubicacion> visitados = new HashSet<>();
 
@@ -243,7 +238,7 @@ public class GrafoNoDirigido {
         // Conjunto disjunto para verificar la conectividad entre las ubicaciones
         DisjointSet disjointSet = new DisjointSet();
 
-        // Agregar todas las aristas ala cola de prioridad
+        // Agregar todas las aristas a la cola de prioridad
         for (Ubicacion origen : listaAdyacencia.keySet()) {
             for (Arista arista : listaAdyacencia.get(origen)) {
                 colaAristas.offer(arista);
@@ -272,7 +267,7 @@ public class GrafoNoDirigido {
     }
 
     // Método para generar la matriz de adyacencia del grafo
-    public int[][] generarMatrizAdyacencia(Ubicacion puntoOrigen) {
+    public int[][] generarMatrizAdyacencia() {
         // Lista para almacenar todas las ubicaciones del grafo
         List<Ubicacion> ubicaciones = new ArrayList<>(listaAdyacencia.keySet());
         int n = ubicaciones.size();
@@ -374,30 +369,4 @@ public class GrafoNoDirigido {
         return distancias;
     }
 
-    // Método para agregar tiempo entre dos ubicaciones
-    public void agregarTiempo(String origen, String destino, int tiempo) {
-        // Buscar las ubicaciones correspondientes en el grafo
-        Ubicacion ubicacionOrigen = obtenerUbicacion(origen);
-        Ubicacion ubicacionDestino = obtenerUbicacion(destino);
-
-        // Verificar si las ubicaciones existen en el grafo
-        if (ubicacionOrigen == null || ubicacionDestino == null) {
-            System.out.println("Una o ambas ubicaciones no existen en el grafo.");
-            return;
-        }
-
-        // Agregar el tiempo al mapa de tiempos de la ubicación de origen
-        ubicacionOrigen.agregarTiempo(ubicacionDestino, tiempo);
-    }
-
-    // Método privado para obtener una ubicación por su nombre
-    private Ubicacion obtenerUbicacion(String nombreUbicacion) {
-        // Iterar sobre las ubicaciones del grafo y encontrar la ubicación con el nombre especificado
-        for (Ubicacion ubicacion : listaAdyacencia.keySet()) {
-            if (ubicacion.getNombre().equals(nombreUbicacion)) {
-                return ubicacion;
-            }
-        }
-        return null; // Si no se encuentra la ubicación, devolver null
-    }
 }
